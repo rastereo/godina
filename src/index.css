@@ -16,7 +16,6 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  outline: 2px solid red;
 }
 
 code {
@@ -34,7 +33,7 @@ h1 {
 p {
   padding: 0;
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 img {
@@ -44,4 +43,18 @@ img {
 .slider {
   display: flex;
   justify-content: center;
+}
+
+.slider__range {
+  width: 100%;
+}
+
+.result {
+  display: flex;
+  justify-content: space-between;
+}
+
+.total {
+  font-size: 30px;
+  color: greenyellow;
 }
