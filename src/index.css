@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: center;
 
   background-color: #282c34;
   color: white;
@@ -16,6 +17,12 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 450px) {
+  body {
+    width: 95vw;
+  }
 }
 
 code {
@@ -37,7 +44,9 @@ p {
 }
 
 img {
-  max-height: 90vh;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .slider {

@@ -1,17 +1,18 @@
-import './App.css';
 import { useEffect, useState } from 'react';
 
+import Preloader from '../Preloader/Preloader';
+
 function App() {
-  const [photoUrl, setPhotoUrl] = useState(null);
-  const [photoYear, setPhotoYear] = useState(null);
-  const [photoTitle, setPhotoTitle] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [photoYear, setPhotoYear] = useState('');
+  const [photoTitle, setPhotoTitle] = useState('');
+  const [photoRegion, setPhotoRegion] = useState('');
   const [userYear, setUserYear] = useState(0);
-  const [isAnswer, setIsAnswer] = useState(false)
-
-  const [score, setScore] = useState(0)
-  const [round, setRound] = useState(1)
-
-  const [isTotal, setIsTotal] = useState(false)
+  const [isAnswer, setIsAnswer] = useState(false);
+  const [score, setScore] = useState(0);
+  const [round, setRound] = useState(1);
+  const [isTotal, setIsTotal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function randomInteger(min, max) {
     // получить случайное число от (min) до (max)
@@ -35,6 +36,8 @@ function App() {
   function getPhoto() {
     const randomNumber = randomInteger(1, 10000000);
 
+    setIsLoading(true);
+
     fetch(`https://pastvu.com/api2?method=photo.giveForPage&params={"cid":${randomNumber}}`)
       .then((res) => {
         if (res.ok) {
@@ -47,20 +50,21 @@ function App() {
           });
       })
       .then((res) => {
-        const { file, year, title } = res.result.photo
+        const { file, year, year2, title, regions } = res.result.photo;
 
         setPhotoUrl(file);
-        setPhotoYear(year);
+        setPhotoYear(Math.round((year + year2) / 2));
         setPhotoTitle(title);
 
-      })
-      .catch((err) => {
-        getPhoto();
-      })
-  }
+        setPhotoRegion(regions.reduce((acc, region) => {
+          acc.push(region.title_local)
 
-  function handleRange(evt) {
-    setUserYear(evt.target.value);
+          return acc
+        }, []).join(', '))
+
+        setIsLoading(false)
+      })
+      .catch(() => getPhoto())
   }
 
   function resetRound() {
@@ -76,13 +80,13 @@ function App() {
     setUserYear(0)
     setScore(0);
     setRound(1);
-    getPhoto();
 
-    console.log(round, 'до getPhoto')
+    getPhoto();
   }
 
   useEffect(() => {
     getPhoto()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -90,7 +94,7 @@ function App() {
       {isTotal
         ? (
           <>
-            <h1 className="total">{`Итог: ${score}`}</h1>
+            <h1 className="total">{`Итог: ${score} из 1000 баллов`}</h1>
             <button
               type="button"
               onClick={restartGame}
@@ -105,12 +109,25 @@ function App() {
               <p>{`Раунд: ${round} из 10`}</p>
               <p>{`Счет: ${score}`}</p>
             </div>
-            <img src={`https://pastvu.com/_p/d/${photoUrl}`} alt="logo" />
-            <h1>
-              {isAnswer && `${photoYear} ${photoTitle}`}
-            </h1>
+            {isLoading
+              ? <Preloader />
+              : (
+                <img
+                  src={`https://pastvu.com/_p/d/${photoUrl}`}
+                  alt="Фото из PstVu"
+                />
+              )
+            }
+            {isAnswer &&
+              <>
+                <h1>
+                  {`${photoYear} год. ${photoTitle}`}
+                </h1>
+                <p>{photoRegion}</p>
+              </>
+            }
             <p>
-              {`Ваш ответ: ${userYear}`}
+              {`Ваш ответ: ${userYear} год`}
             </p>
             <div className="slider">
               <p>1826</p>
@@ -118,7 +135,7 @@ function App() {
                 min="1826"
                 max="2000"
                 value={userYear}
-                onChange={handleRange}
+                onChange={(evt) => setUserYear(evt.target.value)}
                 className="slider__range"
                 disabled={isAnswer}
               >
@@ -134,23 +151,24 @@ function App() {
             </button>
             {round === 10
               ?
-                <button
-                  type="button"
-                  onClick={() => setIsTotal(true)}
-                >
-                  Total
-                </button>
+              <button
+                type="button"
+                onClick={() => setIsTotal(true)}
+                disabled={!isAnswer}
+              >
+                Total
+              </button>
               :
-                <button
-                  type="button"
-                  onClick={() => {
-                    getPhoto()
-                    resetRound()
-                  }}
-                  disabled={!isAnswer}
-                >
-                  Next
-                </button>
+              <button
+                type="button"
+                onClick={() => {
+                  getPhoto()
+                  resetRound()
+                }}
+                disabled={!isAnswer}
+              >
+                Next
+              </button>
             }
           </>
         )
