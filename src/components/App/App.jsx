@@ -28,13 +28,13 @@ function App() {
   }
 
   function showAnswer() {
-    setIsAnswer(true)
+    setIsAnswer(true);
 
-    getPoints()
+    getPoints();
   }
 
   function getPhoto() {
-    const randomNumber = randomInteger(1, 10000000);
+    const randomNumber = randomInteger(1, 5000000);
 
     setIsLoading(true);
 
@@ -46,32 +46,37 @@ function App() {
 
         return res.text()
           .then((error) => {
-            return Promise.reject(JSON.parse(error))
+            return Promise.reject(JSON.parse(error));
           });
       })
       .then((res) => {
         const { file, year, year2, title, regions } = res.result.photo;
 
-        setPhotoUrl(file);
-        setPhotoYear(Math.round((year + year2) / 2));
-        setPhotoTitle(title);
+        if (res.result.can.download === 'login'){
+          setPhotoUrl(file);
+          setPhotoYear(Math.round((year + year2) / 2));
+          setPhotoTitle(title);
+  
+          setPhotoRegion(regions.reduce((acc, region) => {
+            acc.push(region.title_local);
+  
+            return acc;
+          }, []).join(', '))
+  
+          setIsLoading(false);
+        } else {
+          return Promise.reject();
+        }
 
-        setPhotoRegion(regions.reduce((acc, region) => {
-          acc.push(region.title_local)
-
-          return acc
-        }, []).join(', '))
-
-        setIsLoading(false)
       })
       .catch(() => getPhoto())
   }
 
   function resetRound() {
-    setIsAnswer(false)
-    setUserYear(0)
+    setIsAnswer(false);
+    setUserYear(0);
 
-    setRound(round + 1)
+    setRound(round + 1);
   }
 
   function restartGame() {
@@ -85,8 +90,8 @@ function App() {
   }
 
   useEffect(() => {
-    getPhoto()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    getPhoto();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -130,9 +135,9 @@ function App() {
               {`Ваш ответ: ${userYear} год`}
             </p>
             <div className="slider">
-              <p>1826</p>
+              <p>1750</p>
               <input type="range"
-                min="1826"
+                min="1750"
                 max="2000"
                 value={userYear}
                 onChange={(evt) => setUserYear(evt.target.value)}
