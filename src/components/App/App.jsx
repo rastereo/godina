@@ -34,9 +34,9 @@ function App() {
   }
 
   function getFrame() {
-    setIsLoading(true);
-    
-    fetch('https://api.kinopoisk.dev/v1.3/movie/random', {
+    const randomNumber = randomInteger(1, 1300000);
+
+    fetch(`https://api.kinopoisk.dev/v1/image?movieId=${randomNumber}`, {
       method: 'GET',
       headers: {
         "accept": "application/json",
@@ -52,51 +52,63 @@ function App() {
           .then((error) => Promise.reject(JSON.parse(error)));
       })
       .then((data) => {
-        fetch(`https://api.kinopoisk.dev/v1/image?movieId=${data.id}`, {
+        let result;
+
+        if (data.total === 0) {
+          return Promise.reject('нет фотографий');
+        }
+
+        data.docs.forEach((image) => {
+          if (
+            image.type === 'screenshot'
+            || image.type === 'frame'
+            || image.type === 'still'
+          ) {
+            return result = image;
+          }
+        })
+
+        if (result) {
+          return result;
+        } else {
+          return Promise.reject('нет кадра');
+        }
+      })
+      .then((image) => {
+        setPhotoUrl(image.url);
+
+        fetch(`https://api.kinopoisk.dev/v1.3/movie/${image.movieId}`, {
           method: 'GET',
           headers: {
             "accept": "application/json",
             "X-API-KEY": "WT3PTTS-XX84176-GZ4PBCW-GAFHWRF",
           }
         })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-  
-          return res.text()
-            .then((error) => Promise.reject(JSON.parse(error)));
-        })
-        .then((data) => {
-          let result;
-
-          data.docs.forEach((image) => {
-            if (image.type === 'still' || image.type === 'frame') {
-              return result = image.url;
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
             }
+
+            return res.text()
+              .then((error) => Promise.reject(JSON.parse(error)));
           })
+          .then((movie) => {
+            const { year, name, countries } = movie;
 
-          if (result) {
-            return result;
-          }
+            setPhotoYear(year);
+            setPhotoTitle(`Кадр из «${name}»`);
 
-          return Promise.reject('нет кадра');
-        })
-        .then((url) => setPhotoUrl(url))
-        .catch(() => getFrame())
+            setPhotoRegion(countries.reduce((acc, region) => {
+              acc.push(region.name);
 
-        setPhotoYear(data.year)
-        setPhotoTitle(`Кадр из ${data.name}`)
+              return acc;
+            }, []).join(', '))
 
-        setPhotoRegion(data.countries.reduce((acc, region) => {
-          acc.push(region.name);
-
-          return acc;
-        }, []).join(', '))
-
-        setIsLoading(false)
+            setIsLoading(false);
+          })
+          .catch(() => getRandomPhoto())
       })
-      .catch((err) => console.log(err))
+      .catch(() => getRandomPhoto())
   }
 
   function getPhoto() {
@@ -135,11 +147,13 @@ function App() {
         }
 
       })
-      .catch(() => getPhoto())
+      .catch(() => getRandomPhoto())
   }
 
   function getRandomPhoto() {
     const randomApi = randomInteger(1, 1000);
+
+    setIsLoading(true);
 
     if (randomApi < 500) {
       getPhoto()
@@ -193,10 +207,12 @@ function App() {
             {isLoading
               ? <Preloader />
               : (
-                <img
-                  src={photoUrl}
-                  alt="Фото из PastVu"
-                />
+                <div className="test">
+                  <img
+                    src={photoUrl}
+                    alt="Фото из PastVu"
+                  />
+                </div>
               )
             }
             {isAnswer &&
