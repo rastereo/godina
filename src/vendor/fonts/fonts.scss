@@ -1,0 +1,23 @@
+$family: 'Inter';
+$style: normal;
+$display: swap;
+$format: 'woff2';
+$format2: 'woff';
+
+@font-face {
+  font-family: $family;
+  font-style: $style;
+  font-weight: 400;
+  font-display: $display;
+  src: url("./Inter/Inter-Regular.woff2") format($format),
+    url("./Inter/Inter-Regular.woff") format($format2);
+}
+
+@font-face {
+  font-family: $family;
+  font-style: $style;
+  font-weight: 500;
+  font-display: $display;
+  src: url("./Inter/Inter-Medium.woff2") format($format),
+    url("./Inter/Inter-Medium.woff") format($format2);
+}
