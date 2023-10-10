@@ -22,9 +22,19 @@ function App() {
   function getPoints() {
     const distance = Math.abs(photoYear - userYear);
 
-    const points = 100 - distance;
+    // const points = 100 - distance;
+    // const points = -0.1 * Math.pow(distance + 0.5, 2) + 100;
+    let points = 0;
+
+    if (distance <= 30) {
+      points = Math.round(-0.1 * Math.pow(distance + 0.5, 2) + 100);
+    }
 
     setScore(score + points);
+  }
+
+  for (let i = 0; i <= 100; i++) {
+    console.log(-0.1 * Math.pow(i + 0.5, 2) + 100, `distance: ${i}`);
   }
 
   function showAnswer() {
@@ -114,13 +124,11 @@ function App() {
   function getPhoto() {
     const randomNumber = randomInteger(1, 5000000);
 
-    setIsLoading(true);
-
     fetch(`https://pastvu.com/api2?method=photo.giveForPage&params={"cid":${randomNumber}}`)
       .then((res) => {
         if (res.ok) {
           return res.json();
-        }
+        } 
 
         return res.text()
           .then((error) => {
