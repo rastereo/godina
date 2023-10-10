@@ -1,13 +1,13 @@
 import React from 'react';
-import './Preloader.css';
+import './Preloader.scss';
 
 function Preloader() {
   return (
-    <div className="preloader">
-      <div className="preloader__container">
+    <section className="preloader">
+      <div>
         <span className="preloader__round" />
       </div>
-    </div>
+    </section>
   );
 }
 
