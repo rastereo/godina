@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Progress from '../Progress/Progress';
 import Preloader from '../Preloader/Preloader';
 import Total from '../Total/Total';
+import Photograph from '../Photograph/Photograph';
 
 import './App.scss';
 
@@ -17,8 +18,8 @@ function App() {
   const [photoRegion, setPhotoRegion] = useState<string>('');
   const [userYear, setUserYear] = useState<number>(0);
   const [isAnswer, setIsAnswer] = useState<boolean>(false);
-  const [score, setScore] = useState(0);
-  const [round, setRound] = useState(1);
+  const [score, setScore] = useState<number>(0);
+  const [round, setRound] = useState<number>(1);
   const [isTotal, setIsTotal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -199,14 +200,7 @@ function App() {
             <Progress round={round} score={score} />
             {isLoading
               ? <Preloader />
-              : (
-                <div className="test">
-                  <img
-                    src={photoUrl}
-                    alt="Фото из PastVu"
-                  />
-                </div>
-              )}
+              : <Photograph link={photoUrl} />}
             {isAnswer
               && (
                 <>
