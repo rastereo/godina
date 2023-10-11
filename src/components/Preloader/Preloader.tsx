@@ -5,7 +5,7 @@ function Preloader() {
   return (
     <section className="preloader">
       <div>
-        <span className="preloader__round" />
+        <span />
       </div>
     </section>
   );
