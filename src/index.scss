@@ -33,16 +33,6 @@ body {
   margin: 0;
 }
 
-.App {
-  width: 95%;
-  margin: 0 auto;
-}
-
-/* code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-} */
-
 h1 {
   font-size: 14px;
   font-weight: 400;
@@ -74,16 +64,13 @@ img {
   width: 100%;
 }
 
-.total {
-  font-size: 30px;
-  color: greenyellow;
-}
+
 
 .test {
   /* outline: 2px solid red; */
-  height: 80vh;
+  height: 85vh;
 }
 
-/* * {
-  outline: 2px solid green;
-} */
+* {
+  outline: 2px solid red;
+}

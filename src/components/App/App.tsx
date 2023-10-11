@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import Progress from '../Progress/Progress';
 import Preloader from '../Preloader/Preloader';
+import Total from '../Total/Total';
+
+import './App.scss';
 
 interface Image {
   [key: string]: string,
@@ -172,7 +175,7 @@ function App() {
     }
   };
 
-  function restartGame() {
+  function restartGame(): void {
     setIsAnswer(false);
     setIsTotal(false);
     setUserYear(0);
@@ -188,91 +191,79 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <main>
-        {isTotal
-          ? (
-            <>
-              <h1 className="total">{`Итог: ${score} из 1000 баллов`}</h1>
-              <button
-                type="button"
-                onClick={restartGame}
-              >
-                New Game
-              </button>
-            </>
-          )
-          : (
-            <>
-              <Progress round={round} score={score} />
-              {isLoading
-                ? <Preloader />
-                : (
-                  <div className="test">
-                    <img
-                      src={photoUrl}
-                      alt="Фото из PastVu"
-                    />
-                  </div>
-                )}
-              {isAnswer
-                && (
-                  <>
-                    <h1>
-                      {`${photoYear} год. ${photoTitle}`}
-                    </h1>
-                    <p>{photoRegion}</p>
-                  </>
-                )}
-              <p>
-                {`Ваш ответ: ${userYear} год`}
-              </p>
-              <div className="slider">
-                <p>1750</p>
-                <input
-                  type="range"
-                  min="1750"
-                  max="2023"
-                  value={userYear}
-                  onChange={(evt) => setUserYear(Number(evt.target.value))}
-                  className="slider__range"
-                  disabled={isAnswer}
-                />
-                <p>2023</p>
-              </div>
-              <button
-                type="button"
-                onClick={showAnswer}
-                disabled={isAnswer || userYear === 0}
-              >
-                Submit
-              </button>
-              {round === 10
-                ? (
-                  <button
-                    type="button"
-                    onClick={() => setIsTotal(true)}
-                    disabled={!isAnswer}
-                  >
-                    Total
-                  </button>
-                )
-                : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      getRandomPhoto();
-                      resetRound();
-                    }}
-                    disabled={!isAnswer}
-                  >
-                    Next
-                  </button>
-                )}
-            </>
-          )}
-      </main>
-    </div>
+    <main className="App">
+      {isTotal
+        ? <Total score={score} restartGame={restartGame} />
+        : (
+          <>
+            <Progress round={round} score={score} />
+            {isLoading
+              ? <Preloader />
+              : (
+                <div className="test">
+                  <img
+                    src={photoUrl}
+                    alt="Фото из PastVu"
+                  />
+                </div>
+              )}
+            {isAnswer
+              && (
+                <>
+                  <h1>
+                    {`${photoYear} год. ${photoTitle}`}
+                  </h1>
+                  <p>{photoRegion}</p>
+                </>
+              )}
+            <p>
+              {`Ваш ответ: ${userYear} год`}
+            </p>
+            <div className="slider">
+              <p>1750</p>
+              <input
+                type="range"
+                min="1750"
+                max="2023"
+                value={userYear}
+                onChange={(evt) => setUserYear(Number(evt.target.value))}
+                className="slider__range"
+                disabled={isAnswer}
+              />
+              <p>2023</p>
+            </div>
+            <button
+              type="button"
+              onClick={showAnswer}
+              disabled={isAnswer || userYear === 0}
+            >
+              Submit
+            </button>
+            {round === 10
+              ? (
+                <button
+                  type="button"
+                  onClick={() => setIsTotal(true)}
+                  disabled={!isAnswer}
+                >
+                  Total
+                </button>
+              )
+              : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    getRandomPhoto();
+                    resetRound();
+                  }}
+                  disabled={!isAnswer}
+                >
+                  Next
+                </button>
+              )}
+          </>
+        )}
+    </main>
   );
 }
 
