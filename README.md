@@ -54,6 +54,7 @@ npm run start
 + Сайт игры: https://rastereo.github.io/godina/
 + API PastVu: https://docs.pastvu.com/dev/api
 + API Кинопоиска: https://kinopoisk.dev/
++ Формула расчета баллов: https://www.desmos.com/calculator/bp9rmyify1?lang=ru
 
 ## 🔨Планы по доработке
 
