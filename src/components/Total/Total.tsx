@@ -5,17 +5,21 @@ function Total(props: { score: number, restartGame: () => void }) {
   const { score, restartGame } = props;
 
   return (
-    <section className="total">
-      <h1 className="total">
+    <main className="total">
+      <h1>
         {`Итог: ${score} из 1000 баллов`}
       </h1>
       <button
         type="button"
         onClick={restartGame}
       >
-        New Game
+        <span className="shadow" />
+        <span className="edge" />
+        <span className="front">
+          New Game
+        </span>
       </button>
-    </section>
+    </main>
   );
 }
 

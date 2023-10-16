@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import Progress from '../Progress/Progress';
-import Preloader from '../Preloader/Preloader';
 import Total from '../Total/Total';
-import Photograph from '../Photograph/Photograph';
-import CorrectAnswer from '../CorrectAnswer/CorrectAnswer';
-
-import './App.scss';
+import Game from '../Game/Game';
 
 interface Image {
   [key: string]: string,
@@ -201,70 +196,27 @@ function App() {
   }, [distance]);
 
   return (
-    <main className="App">
-      {isTotal
-        ? <Total score={score} restartGame={restartGame} />
-        : (
-          <>
-            <Progress round={round} score={score} />
-            {isLoading
-              ? <Preloader />
-              : <Photograph link={photoUrl} distance={distance} />}
-            <CorrectAnswer
-              year={photoYear}
-              title={photoTitle}
-              region={photoRegion}
-              distance={distance}
-              isAnswer={isAnswer}
-            />
-            <p>
-              {`Ваш ответ: ${userYear} год`}
-            </p>
-            <div className="slider">
-              <p>1750</p>
-              <input
-                type="range"
-                min="1750"
-                max="2023"
-                value={userYear}
-                onChange={(evt) => setUserYear(Number(evt.target.value))}
-                className="slider__range"
-                disabled={isAnswer}
-              />
-              <p>2023</p>
-            </div>
-            <button
-              type="button"
-              onClick={showAnswer}
-              disabled={isAnswer || userYear === 0}
-            >
-              Submit
-            </button>
-            {round === 10
-              ? (
-                <button
-                  type="button"
-                  onClick={() => setIsTotal(true)}
-                  disabled={!isAnswer}
-                >
-                  Total
-                </button>
-              )
-              : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    getRandomPhoto();
-                    resetRound();
-                  }}
-                  disabled={!isAnswer}
-                >
-                  Next
-                </button>
-              )}
-          </>
-        )}
-    </main>
+    isTotal
+      ? <Total score={score} restartGame={restartGame} />
+      : (
+        <Game
+          round={round}
+          score={score}
+          photoUrl={photoUrl}
+          distance={distance}
+          photoYear={photoYear}
+          photoTitle={photoTitle}
+          photoRegion={photoRegion}
+          isAnswer={isAnswer}
+          userYear={userYear}
+          isLoading={isLoading}
+          setUserYear={setUserYear}
+          setIsTotal={setIsTotal}
+          showAnswer={showAnswer}
+          getRandomPhoto={getRandomPhoto}
+          resetRound={resetRound}
+        />
+      )
   );
 }
 

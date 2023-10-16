@@ -1,11 +1,19 @@
 .correct-answer {
-  height: 7vh;
   h2 {
     font-size: 16px;
     font-weight: 400;
     color: #000;
     margin: 0;
     padding: 4px 0;
+  }
+
+  p {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.2;
+    text-align: start;
+    margin: 0;
+    padding: 0;
   }
 }
 

@@ -1,0 +1,32 @@
+.game {
+  box-sizing: border-box;
+  display: grid;
+  width: 100%;
+  max-height: 100vh;
+  grid-template-columns: 100%;
+  grid-template-rows: auto 75vh minmax(7vh, auto) auto;
+  padding: 20px 10px;
+
+  .slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .slider__range {
+      width: 100%;
+    }
+
+    @media screen and (max-width: 768px) {
+      & {
+        padding: 20px 0;
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    & {
+      padding: 5px;
+      grid-template-rows: auto 71vh minmax(7vh, auto) auto;
+    }
+  }
+}
