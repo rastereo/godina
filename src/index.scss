@@ -7,7 +7,7 @@
 @import url(./vendor/normalize.scss);
 
 body {
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-family: 'Better VCR', Arial, Helvetica, sans-serif;
   font-size: 20px;
   font-weight: 400;
   line-height: normal;
@@ -24,7 +24,7 @@ body {
   text-align: center;
 
   height: 100vh;
-  width: 100vw;
+  // width: 100vw;
   background-color: #000;
   color: #fff;
   display: flex;
@@ -34,16 +34,10 @@ body {
 }
 
 h1 {
-  font-size: 14px;
+  // font-size: 14px;
   font-weight: 400;
   padding: 0;
   margin: 0;
-}
-
-p {
-  padding: 0;
-  margin: 0;
-  font-size: 14px;
 }
 
 img {
@@ -53,6 +47,12 @@ img {
   object-fit: contain;
   margin: 0;
   padding: 0;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1;
+  margin: 0;
 }
 
 .slider {

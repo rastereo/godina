@@ -1,5 +1,11 @@
 .photograph {
   img {
-    height: 85vh;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    height: 80vh;
+    object-fit: contain;
+    margin: 0;
+    padding: 0;
   }
 }

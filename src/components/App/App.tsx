@@ -4,6 +4,7 @@ import Progress from '../Progress/Progress';
 import Preloader from '../Preloader/Preloader';
 import Total from '../Total/Total';
 import Photograph from '../Photograph/Photograph';
+import CorrectAnswer from '../CorrectAnswer/CorrectAnswer';
 
 import './App.scss';
 
@@ -18,6 +19,7 @@ function App() {
   const [photoRegion, setPhotoRegion] = useState<string>('');
   const [userYear, setUserYear] = useState<number>(0);
   const [isAnswer, setIsAnswer] = useState<boolean>(false);
+  const [distance, setDistance] = useState<number | null>(null);
   const [score, setScore] = useState<number>(0);
   const [round, setRound] = useState<number>(1);
   const [isTotal, setIsTotal] = useState<boolean>(false);
@@ -28,13 +30,7 @@ function App() {
   }
 
   function getPoints(): void {
-    const distance = Math.abs(Number(photoYear) - userYear);
-
-    let points = 0;
-
-    if (distance <= 30) points = Math.round(-0.1 * (distance + 0.5) ** 2 + 100);
-
-    setScore(score + points);
+    setDistance(Math.abs(Number(photoYear) - userYear));
   }
 
   function showAnswer(): void {
@@ -158,8 +154,10 @@ function App() {
   }
 
   function resetRound() {
+    setDistance(null);
     setIsAnswer(false);
     setUserYear(0);
+    setDistance(null);
 
     setRound(round + 1);
   }
@@ -182,6 +180,7 @@ function App() {
     setUserYear(0);
     setScore(0);
     setRound(1);
+    setDistance(null);
 
     getRandomPhoto();
   }
@@ -190,6 +189,16 @@ function App() {
     getRandomPhoto();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    let points = 0;
+
+    if (distance !== null && distance <= 30) {
+      points = Math.round(-0.1 * (distance + 0.5) ** 2 + 100);
+    }
+
+    setScore(score + points);
+  }, [distance]);
 
   return (
     <main className="App">
@@ -200,16 +209,14 @@ function App() {
             <Progress round={round} score={score} />
             {isLoading
               ? <Preloader />
-              : <Photograph link={photoUrl} />}
-            {isAnswer
-              && (
-                <>
-                  <h1>
-                    {`${photoYear} год. ${photoTitle}`}
-                  </h1>
-                  <p>{photoRegion}</p>
-                </>
-              )}
+              : <Photograph link={photoUrl} distance={distance} />}
+            <CorrectAnswer
+              year={photoYear}
+              title={photoTitle}
+              region={photoRegion}
+              distance={distance}
+              isAnswer={isAnswer}
+            />
             <p>
               {`Ваш ответ: ${userYear} год`}
             </p>
