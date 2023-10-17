@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useEffect, useState } from 'react';
 
 import Total from '../Total/Total';
@@ -25,7 +26,7 @@ function App() {
   }
 
   function getPoints(): void {
-    setDistance(Math.abs(Number(photoYear) - userYear));
+    setDistance(Math.abs(photoYear - userYear));
   }
 
   function showAnswer(): void {
@@ -108,7 +109,7 @@ function App() {
       .catch(() => getRandomPhoto());
   }
 
-  function getPhoto() {
+  function getPhoto(): void {
     const randomNumber = randomInteger(1, 5000000);
 
     fetch(`https://pastvu.com/api2?method=photo.giveForPage&params={"cid":${randomNumber}}`)
@@ -128,7 +129,7 @@ function App() {
           regions,
         } = res.result.photo;
 
-        if (res.result.can.download === 'login') {
+        if (res.result.can.download === 'login' && year >= 1826) {
           setPhotoUrl(`https://pastvu.com/_p/d/${file}`);
           setPhotoYear(Math.round((year + year2) / 2));
           setPhotoTitle(title);
@@ -148,7 +149,56 @@ function App() {
       .catch(() => getRandomPhoto());
   }
 
-  function resetRound() {
+  function getHistorypinPhoto() {
+    const randomNumber = randomInteger(1, 1200000);
+
+    fetch(`http://www.historypin.org/en/api/pin/get.json?id=${randomNumber}`)
+      .then((res) => {
+        if (res.ok) return res.json();
+
+        return res.text()
+          .then((error) => Promise.reject(JSON.parse(error)));
+      })
+      .then((res) => {
+        const {
+          caption,
+          date,
+          display,
+          location,
+        } = res;
+
+        if (
+          date === 'Date Unknown'
+          || date === undefined
+          || caption === ''
+          || display.content === ''
+          || location.geo_tags === ''
+        ) return Promise.reject();
+
+        if (date.length === 4 && Number(date) >= 1826) {
+          setPhotoYear(Number(date));
+        } else if (date.length === 11) {
+          const averageYear = (Number(date.slice(0, 4)) + Number(date.slice(7))) / 2;
+
+          if (averageYear >= 1826) {
+            setPhotoYear(averageYear);
+          } else return Promise.reject();
+        } else return Promise.reject();
+
+        if (display.content.includes('http')) {
+          setPhotoUrl(display.content);
+        } else return Promise.reject();
+
+        setPhotoTitle(caption);
+        setPhotoRegion(location.geo_tags);
+
+        setIsLoading(false);
+      })
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      .catch(() => getRandomPhoto());
+  }
+
+  function resetRound(): void {
     setDistance(null);
     setIsAnswer(false);
     setUserYear(0);
@@ -158,15 +208,13 @@ function App() {
   }
 
   const getRandomPhoto = (): void => {
-    const randomApi = randomInteger(1, 1000);
+    const randomApi = randomInteger(1, 1500);
 
     setIsLoading(true);
 
-    if (randomApi < 500) {
-      getPhoto();
-    } else {
-      getFrame();
-    }
+    if (randomApi <= 500) getPhoto();
+    if (randomApi > 500 && randomApi <= 1000) getFrame();
+    if (randomApi > 1000 && randomApi <= 1500) getHistorypinPhoto();
   };
 
   function restartGame(): void {

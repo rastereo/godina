@@ -3,8 +3,8 @@ import './Photograph.scss';
 
 import colorGradient from '../../utils/colorGradient';
 
-function Photograph(props: { link: string, distance: number | null }) {
-  const { link, distance } = props;
+function Photograph(props: { link: string, distance: number | null, getRandomPhoto: () => void }) {
+  const { link, distance, getRandomPhoto } = props;
 
   const currentImage = useRef<HTMLImageElement>(null);
 
@@ -26,6 +26,7 @@ function Photograph(props: { link: string, distance: number | null }) {
         src={link}
         alt="Фото из PastVu"
         ref={currentImage}
+        onError={() => getRandomPhoto()}
       />
     </section>
   );

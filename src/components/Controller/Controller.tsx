@@ -2,20 +2,26 @@ import React, { useEffect, useRef } from 'react';
 
 import './Controller.scss';
 
+import YearsSlider from '../YearsSlider/YearsSlider';
+
 function Controller(props: {
   userYear: number,
+  photoYear: number
   round: number,
-  isAnswer: boolean
+  isAnswer: boolean,
+  distance: number | null,
   setUserYear: (value: React.SetStateAction<number>) => void,
-  setIsTotal: (value: React.SetStateAction<boolean>) => void
+  setIsTotal: (value: React.SetStateAction<boolean>) => void,
   showAnswer: () => void,
   getRandomPhoto: () => void,
   resetRound: () => void,
 }) {
   const {
     userYear,
-    isAnswer,
+    photoYear,
     round,
+    isAnswer,
+    distance,
     setUserYear,
     setIsTotal,
     showAnswer,
@@ -44,19 +50,17 @@ function Controller(props: {
         />
         год
       </p>
-      <div className="slider">
-        <p>1826</p>
-        <input
-          type="range"
-          min="1826"
-          max={new Date().getFullYear()}
-          value={userYear}
-          onChange={(evt) => setUserYear(Number(evt.target.value))}
-          className="slider__range"
-          disabled={isAnswer}
-        />
-        <p>{new Date().getFullYear()}</p>
-      </div>
+      <YearsSlider
+        userYear={userYear}
+        photoYear={photoYear}
+        isAnswer={isAnswer}
+        distance={distance}
+        setUserYear={setUserYear}
+        // setIsTotal={setIsTotal}
+        // showAnswer={showAnswer}
+        // getRandomPhoto={getRandomPhoto}
+        // resetRound={resetRound}
+      />
       <button
         type="button"
         onClick={showAnswer}

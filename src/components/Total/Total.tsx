@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './Total.scss';
 
 function Total(props: { score: number, restartGame: () => void }) {

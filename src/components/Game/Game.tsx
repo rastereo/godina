@@ -48,7 +48,13 @@ function Game(props: {
       <Progress round={round} score={score} />
       {isLoading
         ? <Preloader />
-        : <Photograph link={photoUrl} distance={distance} />}
+        : (
+          <Photograph
+            link={photoUrl}
+            distance={distance}
+            getRandomPhoto={getRandomPhoto}
+          />
+        )}
       <CorrectAnswer
         year={photoYear}
         title={photoTitle}
@@ -58,7 +64,9 @@ function Game(props: {
       />
       <Controller
         userYear={userYear}
+        photoYear={photoYear}
         isAnswer={isAnswer}
+        distance={distance}
         round={round}
         setUserYear={setUserYear}
         setIsTotal={setIsTotal}
