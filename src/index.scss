@@ -51,7 +51,6 @@ button {
   cursor: pointer;
   outline-offset: 4px;
   transition: filter 250ms;
-  margin-right: 10px;
 
   .shadow {
     position: absolute;
@@ -137,24 +136,6 @@ button {
   }
 }
 
-h1 {
-  font-weight: 400;
-  padding: 0;
-  margin: 0;
-}
-
-p {
-  font-size: 16px;
-  line-height: 1;
-  margin: 0;
-}
-
-
-
-// .test {
-//   /* outline: 2px solid red; */
-//   height: 85vh;
-// }
 
 // * {
 //   outline: 2px solid red;

@@ -1,8 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable consistent-return */
 import React, { useEffect, useState } from 'react';
 
 import Total from '../Total/Total';
 import Game from '../Game/Game';
+
+import pastVuApi from '../../utils/PastVuApi';
+import historyPinApi from '../../utils/HistoryPinApi';
 
 interface Image {
   [key: string]: string,
@@ -109,17 +113,10 @@ function App() {
       .catch(() => getRandomPhoto());
   }
 
-  function getPhoto(): void {
+  function getPastVuPhoto(): void {
     const randomNumber = randomInteger(1, 5000000);
 
-    fetch(`https://pastvu.com/api2?method=photo.giveForPage&params={"cid":${randomNumber}}`)
-      .then((res) => {
-        if (res.ok) return res.json();
-
-        return res.text()
-          .then((error) => Promise.reject(JSON.parse(error)));
-      })
-      // eslint-disable-next-line consistent-return
+    pastVuApi.getPhoto(randomNumber)
       .then((res) => {
         const {
           file,
@@ -149,32 +146,16 @@ function App() {
       .catch(() => getRandomPhoto());
   }
 
-  function getHistorypinPhoto() {
-    const randomNumber = randomInteger(1, 1200000);
+  function getHistoryPinPhoto(): void {
+    const randomNumber = randomInteger(1, 1182800);
 
-    fetch(`http://www.historypin.org/en/api/pin/get.json?id=${randomNumber}`)
-      .then((res) => {
-        if (res.ok) return res.json();
-
-        return res.text()
-          .then((error) => Promise.reject(JSON.parse(error)));
-      })
-      .then((res) => {
-        const {
-          caption,
-          date,
-          display,
-          location,
-        } = res;
-
-        if (
-          date === 'Date Unknown'
-          || date === undefined
-          || caption === ''
-          || display.content === ''
-          || location.geo_tags === ''
-        ) return Promise.reject();
-
+    historyPinApi.getPhoto(randomNumber)
+      .then(({
+        caption,
+        date,
+        display,
+        location,
+      }) => {
         if (date.length === 4 && Number(date) >= 1826) {
           setPhotoYear(Number(date));
         } else if (date.length === 11) {
@@ -203,7 +184,6 @@ function App() {
     setIsAnswer(false);
     setUserYear(0);
     setDistance(null);
-
     setRound(round + 1);
   }
 
@@ -212,9 +192,9 @@ function App() {
 
     setIsLoading(true);
 
-    if (randomApi <= 500) getPhoto();
+    if (randomApi <= 500) getPastVuPhoto();
     if (randomApi > 500 && randomApi <= 1000) getFrame();
-    if (randomApi > 1000 && randomApi <= 1500) getHistorypinPhoto();
+    if (randomApi > 1000 && randomApi <= 1500) getHistoryPinPhoto();
   };
 
   function restartGame(): void {
@@ -230,7 +210,6 @@ function App() {
 
   useEffect(() => {
     getRandomPhoto();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

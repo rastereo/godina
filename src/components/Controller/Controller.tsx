@@ -56,10 +56,6 @@ function Controller(props: {
         isAnswer={isAnswer}
         distance={distance}
         setUserYear={setUserYear}
-        // setIsTotal={setIsTotal}
-        // showAnswer={showAnswer}
-        // getRandomPhoto={getRandomPhoto}
-        // resetRound={resetRound}
       />
       <button
         type="button"

@@ -1,6 +1,13 @@
 .controller {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 25px 10px;
+
   p {
     font-size: 16px;
     font-weight: 400;
+    margin: 0;
   }
 }
