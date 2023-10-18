@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Godina",
+  "name": "Игра: угадай год по фотографии",
   "icons": [
     {
       "src": "favicon.ico",
