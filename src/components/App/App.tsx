@@ -7,10 +7,7 @@ import Game from '../Game/Game';
 
 import pastVuApi from '../../utils/PastVuApi';
 import historyPinApi from '../../utils/HistoryPinApi';
-
-interface Image {
-  [key: string]: string,
-}
+import kinopoiskApi from '../../utils/KinopoiskApi';
 
 function App() {
   const [photoUrl, setPhotoUrl] = useState<string>('');
@@ -39,67 +36,31 @@ function App() {
     getPoints();
   }
 
-  function getFrame(): void {
-    const randomNumber = randomInteger(1, 1300000);
+  function getKinopoiskStill(): void {
+    const randomId = randomInteger(1, 1400000);
 
-    fetch(`https://api.kinopoisk.dev/v1/image?movieId=${randomNumber}`, {
-      method: 'GET',
-      headers: {
-        // eslint-disable-next-line quotes, quote-props, @typescript-eslint/quotes
-        "accept": "application/json",
-        // eslint-disable-next-line quotes, quote-props, @typescript-eslint/quotes
-        "X-API-KEY": "WT3PTTS-XX84176-GZ4PBCW-GAFHWRF",
-      },
-    })
-      .then((res) => {
-        if (res.ok) return res.json();
-
-        return res.text()
-          .then((error) => Promise.reject(JSON.parse(error)));
-      })
+    kinopoiskApi.getStillList(randomId)
       .then((data) => {
-        let result: Image | undefined;
+        if (data.total > 0) {
+          const { imageUrl } = data.items[randomInteger(1, data.items.length)];
 
-        if (data.total === 0) return Promise.reject(new Error('нет фотографий'));
+          return imageUrl;
+        }
 
-        data.docs.forEach((image: Image) => {
-          if (
-            image.type === 'screenshot'
-            || image.type === 'frame'
-            || image.type === 'still'
-          ) result = image;
-        });
-
-        if (result) return result;
-
-        return Promise.reject(new Error('нет кадра'));
+        return Promise.reject();
       })
       .then((image) => {
-        setPhotoUrl(image.url);
+        setPhotoUrl(image);
 
-        fetch(`https://api.kinopoisk.dev/v1.3/movie/${image.movieId}`, {
-          method: 'GET',
-          headers: {
-            // eslint-disable-next-line quotes, quote-props, @typescript-eslint/quotes
-            "accept": "application/json",
-            // eslint-disable-next-line quotes, quote-props, @typescript-eslint/quotes
-            "X-API-KEY": "WT3PTTS-XX84176-GZ4PBCW-GAFHWRF",
-          },
-        })
-          .then((res) => {
-            if (res.ok) return res.json();
-
-            return res.text()
-              .then((error) => Promise.reject(JSON.parse(error)));
-          })
-          .then((movie) => {
-            const { year, name, countries } = movie;
-
+        kinopoiskApi.getFilmInfo(randomId)
+          .then(({ year, nameRu, countries }) => {
             setPhotoYear(year);
-            setPhotoTitle(`Кадр из «${name}»`);
+            setPhotoTitle(`Кадр из «${nameRu}»`);
 
-            setPhotoRegion(countries.reduce((acc: string[], region: Image) => {
-              acc.push(region.name);
+            setPhotoRegion(countries.reduce((acc: string[], region: {
+              [key: string]: string,
+            }) => {
+              acc.push(region.country);
 
               return acc;
             }, []).join(', '));
@@ -131,7 +92,9 @@ function App() {
           setPhotoYear(Math.round((year + year2) / 2));
           setPhotoTitle(title);
 
-          setPhotoRegion(regions.reduce((acc: string[], region: Image) => {
+          setPhotoRegion(regions.reduce((acc: string[], region: {
+            [key: string]: string,
+          }) => {
             acc.push(region.title_local);
 
             return acc;
@@ -159,7 +122,7 @@ function App() {
         if (date.length === 4 && Number(date) >= 1826) {
           setPhotoYear(Number(date));
         } else if (date.length === 11) {
-          const averageYear = (Number(date.slice(0, 4)) + Number(date.slice(7))) / 2;
+          const averageYear = Math.round((Number(date.slice(0, 4)) + Number(date.slice(7))) / 2);
 
           if (averageYear >= 1826) {
             setPhotoYear(averageYear);
@@ -193,8 +156,8 @@ function App() {
     setIsLoading(true);
 
     if (randomApi <= 500) getPastVuPhoto();
-    if (randomApi > 500 && randomApi <= 1000) getFrame();
-    if (randomApi > 1000 && randomApi <= 1500) getHistoryPinPhoto();
+    if (randomApi > 500 && randomApi <= 1000) getKinopoiskStill();
+    if (randomApi > 1000) getHistoryPinPhoto();
   };
 
   function restartGame(): void {
@@ -208,9 +171,7 @@ function App() {
     getRandomPhoto();
   }
 
-  useEffect(() => {
-    getRandomPhoto();
-  }, []);
+  useEffect(() => getRandomPhoto(), []);
 
   useEffect(() => {
     let points = 0;
