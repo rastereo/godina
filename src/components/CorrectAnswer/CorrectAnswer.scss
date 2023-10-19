@@ -7,6 +7,13 @@
     padding: 4px 0;
     border: none;
     transition: all liner 1s;
+
+    @media screen and (max-width: 900px) {
+      & {
+        font-size: 14px;
+        padding: 2px 0;
+      }
+    }
   }
 
   p {
@@ -16,6 +23,11 @@
     text-align: start;
     margin: 0;
     padding: 0;
+
+    @media screen and (max-width: 900px) {
+      & {
+        font-size: 10px;
+      }
+    }
   }
 }
-

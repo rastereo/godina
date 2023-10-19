@@ -1,4 +1,5 @@
-import React from 'react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React, { useEffect } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
@@ -29,6 +30,16 @@ function YearsSlider(props: {
     return 'none';
   }
 
+  const handleStyle = {
+    width: '14px',
+    height: '44px',
+    opacity: 1,
+    border: '2px solid hsl(250deg 100% 20%)',
+    borderRadius: 4,
+    marginTop: '-20px',
+    background: 'linear-gradient(to left, hsl(250deg 100% 16%) 0%, hsl(250deg 100% 32%) 8%, hsl(250deg 100% 32%) 92%, hsl(250deg 100% 16%) 100%)',
+  };
+
   if (isAnswer && distance && distance >= 0) {
     return (
       <div className="slider">
@@ -47,12 +58,12 @@ function YearsSlider(props: {
           disabled
           handleStyle={{
             background: `${getColorRange()}`,
-            width: '14px',
-            height: '24px',
+            width: '10px',
+            height: '34px',
             opacity: 1,
             border: 'none',
             borderRadius: 0,
-            marginTop: '-10px',
+            marginTop: '-15px',
           }}
           railStyle={{
             background: '#fff',
@@ -86,11 +97,11 @@ function YearsSlider(props: {
           handleStyle={{
             background: `${getColorRange()}`,
             width: '14px',
-            height: '24px',
+            height: '44px',
             opacity: 1,
             border: 'none',
             borderRadius: 0,
-            marginTop: '-10px',
+            marginTop: '-20px',
           }}
           railStyle={{
             background: '#fff',
@@ -122,15 +133,7 @@ function YearsSlider(props: {
         startPoint={(1826 + todyYear) / 2}
         defaultValue={(1826 + todyYear) / 2}
         onChange={(number) => setUserYear(Number(number))}
-        handleStyle={{
-          background: 'blue',
-          width: '14px',
-          height: '24px',
-          opacity: 1,
-          border: 'none',
-          borderRadius: 0,
-          marginTop: '-10px',
-        }}
+        handleStyle={handleStyle}
         railStyle={{
           background: '#fff',
         }}

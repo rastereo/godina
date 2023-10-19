@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 import './Controller.scss';
 
@@ -29,12 +29,6 @@ function Controller(props: {
     resetRound,
   } = props;
 
-  const inputNumber = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    inputNumber.current?.focus();
-  }, [round]);
-
   return (
     <section className="controller">
       <p>
@@ -46,7 +40,6 @@ function Controller(props: {
           min={1826}
           max={new Date().getFullYear()}
           disabled={isAnswer}
-          ref={inputNumber}
         />
         год
       </p>

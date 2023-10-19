@@ -5,6 +5,12 @@
   flex-wrap: wrap;
   gap: 25px 10px;
 
+  @media screen and (max-width: 900px) {
+    & {
+      gap: 40px 30px ;
+    }
+  }
+
   p {
     font-size: 16px;
     font-weight: 400;

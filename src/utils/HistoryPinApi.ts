@@ -61,6 +61,6 @@ class HistoryPinApi {
   }
 }
 
-const historyPinApi = new HistoryPinApi('http://www.historypin.org/en/api/pin/get.json');
+const historyPinApi = new HistoryPinApi('https://www.historypin.org/en/api/pin/get.json');
 
 export default historyPinApi;
