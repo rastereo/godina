@@ -8,6 +8,7 @@ import Game from '../Game/Game';
 import pastVuApi from '../../utils/PastVuApi';
 import historyPinApi from '../../utils/HistoryPinApi';
 import kinopoiskApi from '../../utils/KinopoiskApi';
+import BasicTable from '../BasicTable/BasicTable';
 
 function App() {
   const [photoUrl, setPhotoUrl] = useState<string>('');
@@ -37,7 +38,7 @@ function App() {
   }
 
   function getKinopoiskStill(): void {
-    const randomId = randomInteger(1, 1400000);
+    const randomId = randomInteger(1, 1000000);
 
     kinopoiskApi.getStillList(randomId)
       .then((data) => {
@@ -171,7 +172,9 @@ function App() {
     getRandomPhoto();
   }
 
-  useEffect(() => getRandomPhoto(), []);
+  useEffect(() => {
+    getRandomPhoto();
+  }, []);
 
   useEffect(() => {
     let points = 0;
@@ -187,23 +190,26 @@ function App() {
     isTotal
       ? <Total score={score} restartGame={restartGame} />
       : (
-        <Game
-          round={round}
-          score={score}
-          photoUrl={photoUrl}
-          distance={distance}
-          photoYear={photoYear}
-          photoTitle={photoTitle}
-          photoRegion={photoRegion}
-          isAnswer={isAnswer}
-          userYear={userYear}
-          isLoading={isLoading}
-          setUserYear={setUserYear}
-          setIsTotal={setIsTotal}
-          showAnswer={showAnswer}
-          getRandomPhoto={getRandomPhoto}
-          resetRound={resetRound}
-        />
+        <>
+          <Game
+            round={round}
+            score={score}
+            photoUrl={photoUrl}
+            distance={distance}
+            photoYear={photoYear}
+            photoTitle={photoTitle}
+            photoRegion={photoRegion}
+            isAnswer={isAnswer}
+            userYear={userYear}
+            isLoading={isLoading}
+            setUserYear={setUserYear}
+            setIsTotal={setIsTotal}
+            showAnswer={showAnswer}
+            getRandomPhoto={getRandomPhoto}
+            resetRound={resetRound}
+          />
+          {!isTotal && <BasicTable />}
+        </>
       )
   );
 }

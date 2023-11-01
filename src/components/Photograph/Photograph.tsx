@@ -24,7 +24,7 @@ function Photograph(props: { link: string, distance: number | null, getRandomPho
     <section className="photograph">
       <img
         src={link}
-        alt="Фото из PastVu"
+        alt="Фото из игры"
         ref={currentImage}
         onError={() => getRandomPhoto()}
       />

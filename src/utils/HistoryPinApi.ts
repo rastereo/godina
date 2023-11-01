@@ -1,5 +1,7 @@
 /* eslint-disable class-methods-use-this */
 // https://historypin.github.io/api-docs/index.html
+// https://corsproxy.io/
+// https://github.com/Freeboard/thingproxy
 
 interface ResponseData {
   caption: string,
@@ -16,6 +18,8 @@ interface ResponseData {
 }
 
 class HistoryPinApi {
+  private corsProxy: string = 'https://thingproxy.freeboard.io/fetch/';
+
   constructor(private baseUrl: string) { }
 
   private setParams(id: number): string {
