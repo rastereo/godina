@@ -1,20 +1,5 @@
 /* eslint-disable class-methods-use-this */
-// https://docs.pastvu.com/dev/api
-
-// interface ResponseData {
-//   result: {
-//     can: {
-//       [key: string]: string
-//     }
-//     photo: {
-//       file: string,
-//       year: number,
-//       year2: number,
-//       title: string,
-//       regions: {}[],
-//     }
-//   }
-// }
+// https://seeing.monster/docs#/Godina%20back%20API/send_score_api_send_score_post
 
 class MainApi {
   constructor(private baseUrl: string) { }

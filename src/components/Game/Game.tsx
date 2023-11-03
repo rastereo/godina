@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './Game.scss';
 
@@ -11,9 +11,9 @@ import Preloader from '../Preloader/Preloader';
 function Game(props: {
   round: number,
   score: number,
-  photoUrl: string,
+  photoUrl: string | null,
   distance: number | null,
-  photoYear: number,
+  photoYear: number | null,
   photoTitle: string
   photoRegion: string,
   isAnswer: boolean,
@@ -43,6 +43,9 @@ function Game(props: {
     resetRound,
   } = props;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
   return (
     <main className="game">
       <Progress round={round} score={score} />
@@ -53,6 +56,7 @@ function Game(props: {
             link={photoUrl}
             distance={distance}
             getRandomPhoto={getRandomPhoto}
+            setIsLoaded={setIsLoaded}
           />
         )}
       <CorrectAnswer
@@ -71,8 +75,9 @@ function Game(props: {
         setUserYear={setUserYear}
         setIsTotal={setIsTotal}
         showAnswer={showAnswer}
-        getRandomPhoto={getRandomPhoto}
         resetRound={resetRound}
+        isLoaded={isLoaded}
+        setIsLoaded={setIsLoaded}
       />
     </main>
   );

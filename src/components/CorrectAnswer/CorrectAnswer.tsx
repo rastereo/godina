@@ -5,7 +5,7 @@ import './CorrectAnswer.scss';
 import colorGradient from '../../utils/colorGradient';
 
 function CorrectAnswer(props: {
-  year: number,
+  year: number | null,
   title: string,
   region: string,
   distance: number | null,

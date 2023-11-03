@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from 'react';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+
 import mainApi from '../../utils/MainApi';
 
 import colorGradient from '../../utils/colorGradient';
-
-// function createData(
-//   name: string,
-//   score: number,
-// ) {
-//   // eslint-disable-next-line object-curly-newline
-//   return { name, score };
-// }
 
 export default function BasicTable() {
   const [topScore, setTopScore] = useState<any>(null);
   const [error, setError] = useState<any>(null);
 
-  const reducedGradient: string[] = colorGradient
-    .filter((color, index) => index % 3 === 0);
+  // const colorGradient: string[] = colorGradient
+  //   .filter((color, index) => index % 3 === 0);
 
   const userName = localStorage.getItem('name');
 
@@ -34,7 +27,6 @@ export default function BasicTable() {
       })
       .catch((err) => {
         setError(err);
-        // console.log(err);
       });
   }, []);
 
@@ -56,21 +48,10 @@ export default function BasicTable() {
       >
         <Table
           sx={{
-            // minWidth: 650,
             width: '100%',
-            color: 'white',
           }}
           aria-label="simple table"
         >
-          <TableHead>
-            <TableRow>
-              {/* <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
-            </TableRow>
-          </TableHead>
           <TableBody>
             {topScore && topScore.map((user: { name: string, score: number }, index: number) => (
               <TableRow
@@ -80,30 +61,45 @@ export default function BasicTable() {
                     border: 0,
                   },
                   color: 'white',
-                  // border: '2px solid red',
                 }}
               >
                 <TableCell
                   component="th"
                   scope="row"
                   sx={{
-                    color: reducedGradient[index],
+                    fontFamily: 'Better VCR, sans-serif',
+                    color: colorGradient[index],
                     fontSize: '20px',
                     border: user.name === userName ? '' : 'none',
-                    borderColor: user.name === userName ? '' : reducedGradient[index],
+                    borderColor: user.name === userName ? '' : colorGradient[index],
                   }}
                 >
-                  <span className="top-users__position">{index + 1}</span>
+                  {index + 1}
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{
+                    width: '100%',
+                    fontFamily: 'Better VCR, sans-serif',
+                    textAlign: 'center',
+                    color: colorGradient[index],
+                    fontSize: '20px',
+                    border: user.name === userName ? '' : 'none',
+                    borderColor: user.name === userName ? '' : colorGradient[index],
+                  }}
+                >
                   {index === 0 && '👑'}
                   {user.name}
                 </TableCell>
                 <TableCell
                   align="right"
                   sx={{
-                    color: reducedGradient[index],
+                    fontFamily: 'Better VCR, sans-serif',
+                    color: colorGradient[index],
                     fontSize: '20px',
                     border: user.name === userName ? '' : 'none',
-                    borderColor: user.name === userName ? '' : reducedGradient[index],
+                    borderColor: user.name === userName ? '' : colorGradient[index],
                   }}
                 >
                   {user.score}

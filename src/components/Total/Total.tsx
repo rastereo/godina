@@ -44,7 +44,10 @@ function Total(props: { score: number, restartGame: () => void }) {
           variant="filled"
           autoComplete="new-password"
           sx={{
+            fontFamily: 'Better VCR, sans-serif',
             background: 'white',
+            '& input': { fontFamily: 'Better VCR, sans-serif' },
+            '& label': { fontFamily: 'Better VCR, sans-serif' },
           }}
           value={value && value}
           onChange={(e) => setValue(e.target.value)}
