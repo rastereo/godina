@@ -63,7 +63,7 @@ class KinopoiskApi {
 
 const kinopoiskApi = new KinopoiskApi(
   'https://kinopoiskapiunofficial.tech/api/v2.2/films',
-  '71e0033a-59a3-4b25-94c6-2fe8a53a041f',
+  '1e6a0dbf-a4e1-4045-aa4a-dadee214c91d',
 );
 
 export default kinopoiskApi;

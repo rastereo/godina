@@ -9,10 +9,11 @@ import UseGetColor from '../../hooks/UseGetColor';
 
 function YearsSlider(props: {
   userYear: number,
-  photoYear: number,
+  photoYear: number | null,
   isAnswer: boolean,
   distance: number | null,
   setUserYear: (value: React.SetStateAction<number>) => void,
+  isLoaded: boolean
 }) {
   const {
     userYear,
@@ -20,6 +21,7 @@ function YearsSlider(props: {
     isAnswer,
     distance,
     setUserYear,
+    isLoaded,
   } = props;
 
   const todyYear = new Date().getFullYear();
@@ -33,14 +35,14 @@ function YearsSlider(props: {
   const handleStyle = {
     width: '14px',
     height: '44px',
-    opacity: 1,
+    opacity: `${isLoaded ? 1 : 0}`,
     border: '2px solid hsl(250deg 100% 20%)',
     borderRadius: 4,
     marginTop: '-20px',
     background: 'linear-gradient(to left, hsl(250deg 100% 16%) 0%, hsl(250deg 100% 32%) 8%, hsl(250deg 100% 32%) 92%, hsl(250deg 100% 16%) 100%)',
   };
 
-  if (isAnswer && distance && distance >= 0) {
+  if (isAnswer && distance && distance >= 0 && photoYear) {
     return (
       <div className="slider">
         <p>1826</p>
@@ -79,7 +81,7 @@ function YearsSlider(props: {
     );
   }
 
-  if (isAnswer && distance === 0) {
+  if (isAnswer && distance === 0 && photoYear) {
     return (
       <div className="slider">
         <p>1826</p>
@@ -140,6 +142,7 @@ function YearsSlider(props: {
         trackStyle={{
           background: 'none',
         }}
+        disabled={!isLoaded}
       />
       <p>{todyYear}</p>
     </div>

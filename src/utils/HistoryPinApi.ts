@@ -53,7 +53,13 @@ class HistoryPinApi {
   }
 
   public async getPhoto(id: number): Promise<ResponseData> {
-    const res = await fetch(this.baseUrl + this.setParams(id));
+    const res = await fetch(
+      this.baseUrl + this.setParams(id),
+      {
+        method: 'GET',
+        credentials: 'include' as RequestCredentials,
+      },
+    );
 
     const data = this.getResponseData(res);
 

@@ -6,15 +6,17 @@ import YearsSlider from '../YearsSlider/YearsSlider';
 
 function Controller(props: {
   userYear: number,
-  photoYear: number
+  photoYear: number | null,
   round: number,
   isAnswer: boolean,
   distance: number | null,
   setUserYear: (value: React.SetStateAction<number>) => void,
   setIsTotal: (value: React.SetStateAction<boolean>) => void,
   showAnswer: () => void,
-  getRandomPhoto: () => void,
+  // getRandomPhoto: () => void,
   resetRound: () => void,
+  isLoaded: boolean
+  setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>,
 }) {
   const {
     userYear,
@@ -25,8 +27,10 @@ function Controller(props: {
     setUserYear,
     setIsTotal,
     showAnswer,
-    getRandomPhoto,
+    // getRandomPhoto,
     resetRound,
+    isLoaded,
+    setIsLoaded,
   } = props;
 
   return (
@@ -39,7 +43,7 @@ function Controller(props: {
           onChange={(evt) => setUserYear(Number(evt.target.value))}
           min={1826}
           max={new Date().getFullYear()}
-          disabled={isAnswer}
+          disabled={isAnswer || !isLoaded}
         />
         год
       </p>
@@ -49,6 +53,7 @@ function Controller(props: {
         isAnswer={isAnswer}
         distance={distance}
         setUserYear={setUserYear}
+        isLoaded={isLoaded}
       />
       <button
         type="button"
@@ -79,8 +84,8 @@ function Controller(props: {
           <button
             type="submit"
             onClick={() => {
-              getRandomPhoto();
               resetRound();
+              setIsLoaded(false);
             }}
             disabled={!isAnswer}
           >

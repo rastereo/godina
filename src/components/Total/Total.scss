@@ -1,6 +1,6 @@
 .total {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -11,5 +11,18 @@
     font-size: 30px;
     font-weight: 400;
     color: greenyellow;
+
+    @media (max-width: 550px) {
+      & {
+        font-size: 18px;
+      }
+    }
+  }
+
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px,
   }
 }
