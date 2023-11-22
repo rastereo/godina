@@ -1,7 +1,5 @@
 /* eslint-disable class-methods-use-this */
 // https://historypin.github.io/api-docs/index.html
-// https://corsproxy.io/
-// https://github.com/Freeboard/thingproxy
 
 interface ResponseData {
   caption: string,
@@ -18,8 +16,6 @@ interface ResponseData {
 }
 
 class HistoryPinApi {
-  private corsProxy: string = 'https://thingproxy.freeboard.io/fetch/';
-
   constructor(private baseUrl: string) { }
 
   private setParams(id: number): string {
@@ -59,10 +55,10 @@ class HistoryPinApi {
   public async getPhoto(id: number): Promise<ResponseData> {
     const res = await fetch(
       this.baseUrl + this.setParams(id),
-      // {
-      //   method: 'GET',
-      //   credentials: 'include' as RequestCredentials,
-      // },
+      {
+        method: 'GET',
+        credentials: 'include' as RequestCredentials,
+      },
     );
 
     const data = this.getResponseData(res);
