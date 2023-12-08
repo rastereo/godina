@@ -9,6 +9,7 @@ import pastVuApi from '../../utils/PastVuApi';
 import historyPinApi from '../../utils/HistoryPinApi';
 import kinopoiskApi from '../../utils/KinopoiskApi';
 import BasicTable from '../BasicTable/BasicTable';
+import { IApi, IContentPhoto } from '../../types';
 
 function App() {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
@@ -29,8 +30,35 @@ function App() {
     return Math.round(min + Math.random() * (max - min));
   }
 
-  function getPoints(): void {
+  function getPoints() {
     if (photoYear) setDistance(Math.abs(photoYear - userYear));
+  }
+
+  function setContentPhoto(
+    api: IApi,
+    min: number,
+    max: number,
+  ) {
+    const randomIp = randomInteger(min, max);
+
+    api.getPhoto(randomIp, isPhotoLoaded)
+      .then(({
+        url,
+        year,
+        title,
+        region,
+      }: IContentPhoto) => {
+        setPhotoUrl(url);
+        setPhotoYear(year);
+        setPhotoTitle(title);
+        setPhotoRegion(region);
+
+        isPhotoLoaded = true;
+
+        setIsLoading(false);
+      })
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      .catch(getRandomPhoto);
   }
 
   function fetchWithTimeout(resource: string) {
@@ -57,13 +85,14 @@ function App() {
     return response;
   }
 
-  function showAnswer(): void {
+  function showAnswer() {
     setIsAnswer(true);
 
     getPoints();
   }
 
-  function getKinopoiskStill(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function getKinopoiskStill() {
     const randomId = randomInteger(1, 1000000);
 
     kinopoiskApi.getStillList(randomId)
@@ -103,90 +132,12 @@ function App() {
       .catch(() => getRandomPhoto());
   }
 
-  function getPastVuPhoto(): void {
-    const randomNumber = randomInteger(1, 5000000);
-
-    pastVuApi.getPhoto(randomNumber)
-      .then((res) => {
-        const {
-          file,
-          year,
-          year2,
-          title,
-          regions,
-        } = res.result.photo;
-
-        if (res.result.can.download === 'login' && year >= 1826 && !isPhotoLoaded) {
-          setPhotoUrl(`https://pastvu.com/_p/d/${file}`);
-          setPhotoYear(Math.round((year + year2) / 2));
-          setPhotoTitle(title);
-
-          setPhotoRegion(regions.reduce((acc: string[], region: {
-            [key: string]: string,
-          }) => {
-            acc.push(region.title_local);
-
-            return acc;
-          }, []).join(', '));
-
-          isPhotoLoaded = true;
-
-          setIsLoading(false);
-        } else {
-          return Promise.reject();
-        }
-      })
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      .catch(() => getRandomPhoto());
-  }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function getHistoryPinPhoto(): void {
-    const randomNumber = randomInteger(1, 1300000);
-
-    historyPinApi.getPhoto(randomNumber)
-      .then(({
-        caption,
-        date,
-        display,
-        location,
-      }) => {
-        if (!isPhotoLoaded) {
-          if (date.length === 4 && Number(date) >= 1826) {
-            setPhotoYear(Number(date));
-          } else if (date.length === 11) {
-            const averageYear = Math.round((Number(date.slice(0, 4)) + Number(date.slice(7))) / 2);
-
-            if (averageYear >= 1826) {
-              setPhotoYear(averageYear);
-            } else return Promise.reject();
-          } else if (date.length === 10) {
-            const sliceYear = Number(date.slice(0, 4));
-
-            if (sliceYear >= 1826) {
-              setPhotoYear(sliceYear);
-            } else return Promise.reject();
-          } else return Promise.reject();
-
-          if (
-            display.content.includes('http')
-            && display.content !== 'https://photos-cdn.historypin.org/services/thumb/phid/1095200/dim/1000x1000/c/1512924030'
-          ) {
-            // https://photos-cdn.historypin.org/services/thumb/phid/1078627/dim/1000x1000/c/1499828996
-            setPhotoUrl(display.content);
-          } else return Promise.reject();
-
-          setPhotoTitle(caption);
-          setPhotoRegion(location.geo_tags);
-
-          isPhotoLoaded = true;
-
-          setIsLoading(false);
-        }
-      })
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      .catch(() => getRandomPhoto());
+    setContentPhoto(historyPinApi, 1, 1300000);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function getLOCPhoto() {
     fetchWithTimeout(`https://www.loc.gov/photos/?fo=json&c=1&sp=${randomInteger(1, 150000)}`)
       .then((res: Response) => {
@@ -228,9 +179,9 @@ function App() {
 
     const randomApi = randomInteger(1, 4000);
 
-    if (randomApi <= 1000) getPastVuPhoto();
+    if (randomApi <= 1000) setContentPhoto(pastVuApi, 1, 5000000);
     if (randomApi > 1000 && randomApi <= 2000) getKinopoiskStill();
-    if (randomApi > 2000 && randomApi <= 3000) getHistoryPinPhoto();
+    if (randomApi > 2000 && randomApi <= 3000) setContentPhoto(historyPinApi, 1, 1300000);
     if (randomApi > 3000) getLOCPhoto();
   };
 

@@ -1,6 +1,8 @@
 /* eslint-disable class-methods-use-this */
 // https://historypin.github.io/api-docs/index.html
 
+import { IContentPhoto } from '../types';
+
 interface ResponseData {
   caption: string,
   date: string,
@@ -22,6 +24,57 @@ class HistoryPinApi {
     return `?id=${id}`;
   }
 
+  private getContentPhoto(
+    res: ResponseData,
+    isPhotoLoaded: boolean,
+  ): Promise<never> | IContentPhoto {
+    const {
+      caption,
+      date,
+      display,
+      location,
+    } = res;
+
+    if (!isPhotoLoaded) {
+      const contentPhoto: IContentPhoto = {
+        url: '',
+        year: 0,
+        title: '',
+        region: '',
+      };
+
+      if (date.length === 4 && Number(date) >= 1826) {
+        contentPhoto.year = Number(date);
+      } else if (date.length === 11) {
+        const averageYear = Math.round((Number(date.slice(0, 4)) + Number(date.slice(7))) / 2);
+
+        if (averageYear >= 1826) {
+          contentPhoto.year = averageYear;
+        } else return Promise.reject();
+      } else if (date.length === 10) {
+        const sliceYear = Number(date.slice(0, 4));
+
+        if (sliceYear >= 1826) {
+          contentPhoto.year = sliceYear;
+        } else return Promise.reject();
+      } else return Promise.reject();
+
+      if (
+        display.content.includes('http')
+        && display.content !== 'https://photos-cdn.historypin.org/services/thumb/phid/1095200/dim/1000x1000/c/1512924030'
+      ) {
+        // https://photos-cdn.historypin.org/services/thumb/phid/1078627/dim/1000x1000/c/1499828996
+        contentPhoto.url = display.content;
+        contentPhoto.title = caption;
+        contentPhoto.region = location.geo_tags;
+      } else return Promise.reject();
+
+      return contentPhoto;
+    }
+
+    return Promise.reject();
+  }
+
   private async getResponseData(res: Response): Promise<ResponseData | never> {
     if (res.ok) {
       return res.json();
@@ -31,7 +84,9 @@ class HistoryPinApi {
     return Promise.reject(JSON.parse(error));
   }
 
-  private checkData(data: ResponseData): ResponseData | Promise<never> {
+  private checkData(
+    data: ResponseData,
+  ): Promise<never> | ResponseData {
     const {
       caption,
       date,
@@ -52,18 +107,17 @@ class HistoryPinApi {
     return data;
   }
 
-  public async getPhoto(id: number): Promise<ResponseData> {
+  public async getPhoto(id: number, isPhotoLoaded: boolean): Promise<never | IContentPhoto> {
     const res = await fetch(
       this.baseUrl + this.setParams(id),
       {
         method: 'GET',
-        credentials: 'include' as RequestCredentials,
       },
     );
 
-    const data = this.getResponseData(res);
+    const data = await this.checkData(await this.getResponseData(res));
 
-    return this.checkData(await data);
+    return this.getContentPhoto(data, isPhotoLoaded);
   }
 }
 
