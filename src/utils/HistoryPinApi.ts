@@ -18,7 +18,7 @@ interface ResponseData {
 }
 
 class HistoryPinApi {
-  constructor(private baseUrl: string) { }
+  constructor(private baseUrl: string) {}
 
   private setParams(id: number): string {
     return `?id=${id}`;

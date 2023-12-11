@@ -19,7 +19,7 @@ interface ResponseData {
 }
 
 class PastVuApi {
-  constructor(private baseUrl: string) { }
+  constructor(private baseUrl: string) {}
 
   private setParams(id: number): string {
     return `&params={"cid":${id}}`;
@@ -29,7 +29,7 @@ class PastVuApi {
     res: ResponseData,
     isPhotoLoaded: boolean,
   ): Promise<never> | IContentPhoto {
-    if (res.result.photo && res.result.can.download === 'login' && !isPhotoLoaded) {
+    if (res.result.photo && res.result.can.download === 'login' && res.result.photo.year >= 1826 && !isPhotoLoaded) {
       const {
         file,
         year,
@@ -38,24 +38,18 @@ class PastVuApi {
         regions,
       } = res.result.photo;
 
-      if (year >= 1826) {
-        const contentPhoto: IContentPhoto = {
-          url: `https://pastvu.com/_p/d/${file}`,
-          year: Math.round((year + year2) / 2),
-          title,
-          region: regions.reduce((acc: string[], region: {
-            [key: string]: string,
-          }) => {
-            acc.push(region.title_local);
+      return {
+        url: `https://pastvu.com/_p/d/${file}`,
+        year: Math.round((year + year2) / 2),
+        title,
+        region: regions.reduce((acc: string[], region: {
+          [key: string]: string,
+        }) => {
+          acc.push(region.title_local);
 
-            return acc;
-          }, []).join(', '),
-        };
-
-        return contentPhoto;
-      }
-
-      return Promise.reject();
+          return acc;
+        }, []).join(', '),
+      };
     }
 
     return Promise.reject();
@@ -76,7 +70,10 @@ class PastVuApi {
     return Promise.reject(JSON.parse(error));
   }
 
-  public async getPhoto(id: number, isPhotoLoaded: boolean): Promise<never | IContentPhoto> {
+  public async getPhoto(
+    id: number,
+    isPhotoLoaded: boolean,
+  ): Promise<never | IContentPhoto> {
     const res = await fetch(this.baseUrl + this.setParams(id));
 
     return this.getResponseData(res, isPhotoLoaded);
