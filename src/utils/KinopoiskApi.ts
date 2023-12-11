@@ -1,6 +1,8 @@
 /* eslint-disable class-methods-use-this */
 // https://kinopoiskapiunofficial.tech/
 
+import { IContentPhoto } from '../types';
+
 interface ResponseStillList {
   total: number,
   items: [{
@@ -33,10 +35,49 @@ class KinopoiskApi {
     }
 
     const error = await res.text();
+
     return Promise.reject(JSON.parse(error));
   }
 
-  public async getFilmInfo(id: number): Promise<ResponseFilmInfo> {
+  private async getContentPhoto(id: number, imageUrl: string) {
+    const contentPhoto: IContentPhoto = {
+      url: '',
+      year: 0,
+      title: '',
+      region: '',
+    };
+
+    const filmInfo = await this.getFilmInfo(id);
+
+    contentPhoto.url = imageUrl;
+    contentPhoto.year = filmInfo.year;
+    contentPhoto.title = `Кадр из «${filmInfo.nameRu}»`;
+
+    contentPhoto.region = filmInfo.countries.reduce((acc: string[], region: {
+      [key: string]: string,
+    }) => {
+      acc.push(region.country);
+
+      return acc;
+    }, []).join(', ');
+
+    return contentPhoto;
+  }
+
+  private getImageUrl(
+    data: ResponseStillList,
+    randomInteger: (min: number, max: number) => number,
+  ): string | Promise<never> {
+    if (data.total > 0) {
+      const { imageUrl } = data.items[randomInteger(1, data.items.length)];
+
+      return imageUrl;
+    }
+
+    return Promise.reject();
+  }
+
+  private async getFilmInfo(id: number): Promise<ResponseFilmInfo> {
     const filmInfo = await fetch(this.baseUrl + this.setFilmId(id), {
       method: 'GET',
       headers: {
@@ -48,7 +89,7 @@ class KinopoiskApi {
     return this.getResponseData(filmInfo);
   }
 
-  public async getStillList(id: number): Promise<ResponseStillList> {
+  private async getStillList(id: number): Promise<ResponseStillList> {
     const stillList = await fetch(this.baseUrl + this.setFilmId(id) + this.setParameters(), {
       method: 'GET',
       headers: {
@@ -58,6 +99,18 @@ class KinopoiskApi {
     });
 
     return this.getResponseData(stillList);
+  }
+
+  public async getPhoto(
+    id: number,
+    isPhotoLoaded: boolean,
+    randomInteger: (min: number, max: number) => number,
+  ): Promise<never | IContentPhoto> {
+    const stillList = await this.getStillList(id);
+
+    const imageUrl = await this.getImageUrl(stillList, randomInteger);
+
+    return this.getContentPhoto(id, imageUrl);
   }
 }
 
