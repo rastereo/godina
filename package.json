@@ -14,6 +14,7 @@
     "@types/node": "^20.8.4",
     "@types/react": "^18.2.27",
     "@types/react-dom": "^18.2.12",
+    "bottleneck": "^2.19.5",
     "cra-template": "1.2.0",
     "rc-slider": "^10.2.1",
     "react": "^18.2.0",

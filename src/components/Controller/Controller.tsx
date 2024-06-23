@@ -13,7 +13,6 @@ function Controller(props: {
   setUserYear: (value: React.SetStateAction<number>) => void,
   setIsTotal: (value: React.SetStateAction<boolean>) => void,
   showAnswer: () => void,
-  // getRandomPhoto: () => void,
   resetRound: () => void,
   isLoaded: boolean
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>,
@@ -27,7 +26,6 @@ function Controller(props: {
     setUserYear,
     setIsTotal,
     showAnswer,
-    // getRandomPhoto,
     resetRound,
     isLoaded,
     setIsLoaded,

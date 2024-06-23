@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 
 import Total from '../Total/Total';
 import Game from '../Game/Game';
-import BasicTable from '../BasicTable/BasicTable';
 
 import apiConfig from '../../utils/apiConfig';
 
@@ -41,7 +40,11 @@ function App() {
 
     const randomApi = randomInteger(0, apiConfig.length - 1);
 
-    const { api, minId, maxId } = apiConfig[randomApi];
+    const {
+      api,
+      minId,
+      maxId,
+    } = apiConfig[randomApi];
 
     try {
       const {
@@ -113,6 +116,7 @@ function App() {
       ? <Total score={score} restartGame={restartGame} />
       : (
         <>
+          {/* <Presentation /> */}
           <Game
             round={round}
             score={score}
@@ -130,7 +134,7 @@ function App() {
             getRandomPhoto={getRandomPhoto}
             resetRound={resetRound}
           />
-          {!isTotal && <BasicTable />}
+          {/* {!isTotal && <BasicTable />} */}
         </>
       )
   );

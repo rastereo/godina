@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 // https://historypin.github.io/api-docs/index.html
 
+import Bottleneck from 'bottleneck';
 import { IContentPhoto } from '../types';
 
 interface ResponseData {
@@ -18,7 +19,12 @@ interface ResponseData {
 }
 
 class HistoryPinApi {
-  constructor(private baseUrl: string) {}
+  limiter = new Bottleneck({
+    maxConcurrent: 1,
+  });
+
+  constructor(private baseUrl: string) {
+  }
 
   private setParams(id: number): string {
     return `?id=${id}`;
@@ -43,28 +49,23 @@ class HistoryPinApi {
         region: '',
       };
 
-      if (date.length === 4 && Number(date) >= 1826) {
-        contentPhoto.year = Number(date);
-      } else if (date.length === 11) {
-        const averageYear = Math.round((Number(date.slice(0, 4)) + Number(date.slice(7))) / 2);
+      const regexYear = /[12]\d{3}/g;
 
-        if (averageYear >= 1826) {
-          contentPhoto.year = averageYear;
-        } else return Promise.reject();
-      } else if (date.length === 10) {
-        const sliceYear = Number(date.slice(0, 4));
+      const yearMatch = date.match(regexYear);
 
-        if (sliceYear >= 1826) {
-          contentPhoto.year = sliceYear;
-        } else return Promise.reject();
+      if (yearMatch) {
+        let yearSum: number = 0;
+
+        // eslint-disable-next-line no-return-assign
+        yearMatch.forEach((year) => yearSum += Number(year));
+
+        contentPhoto.year = Math.round(yearSum / yearMatch.length);
       } else return Promise.reject();
 
-      if (
-        display.content.includes('http')
-        && display.content !== 'https://photos-cdn.historypin.org/services/thumb/phid/1095200/dim/1000x1000/c/1512924030'
-      ) {
-        // https://photos-cdn.historypin.org/services/thumb/phid/1078627/dim/1000x1000/c/1499828996
-        contentPhoto.url = display.content;
+      if (display.content) {
+        const url = `https://www.historypin.org${display.content}`;
+
+        contentPhoto.url = url;
         contentPhoto.title = caption;
         contentPhoto.region = location.geo_tags;
       } else return Promise.reject();
@@ -108,12 +109,12 @@ class HistoryPinApi {
   }
 
   public async getPhoto(id: number, isPhotoLoaded: boolean): Promise<never | IContentPhoto> {
-    const res = await fetch(
+    const res = await this.limiter.schedule(() => fetch(
       this.baseUrl + this.setParams(id),
       {
         method: 'GET',
       },
-    );
+    ));
 
     const data = await this.checkData(await this.getResponseData(res));
 

@@ -2,7 +2,7 @@
 // https://seeing.monster/docs#/Godina%20back%20API/send_score_api_send_score_post
 
 class MainApi {
-  constructor(private baseUrl: string) { }
+  constructor(private baseUrl: string) {}
 
   private setParams(name: string, score: number): string {
     return `?new_score=${score}&name=${name}`;
