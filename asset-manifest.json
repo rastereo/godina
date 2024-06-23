@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/godina/static/css/main.890cae91.css",
-    "main.js": "/godina/static/js/main.abd1e7e6.js",
+    "main.css": "/godina/static/css/main.1e4eb165.css",
+    "main.js": "/godina/static/js/main.de4ac6b2.js",
     "static/js/787.109981fe.chunk.js": "/godina/static/js/787.109981fe.chunk.js",
     "static/media/better-vcr.ttf": "/godina/static/media/better-vcr.200e3c63239e939ec234.ttf",
     "index.html": "/godina/index.html",
-    "main.890cae91.css.map": "/godina/static/css/main.890cae91.css.map",
-    "main.abd1e7e6.js.map": "/godina/static/js/main.abd1e7e6.js.map",
+    "main.1e4eb165.css.map": "/godina/static/css/main.1e4eb165.css.map",
+    "main.de4ac6b2.js.map": "/godina/static/js/main.de4ac6b2.js.map",
     "787.109981fe.chunk.js.map": "/godina/static/js/787.109981fe.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.890cae91.css",
-    "static/js/main.abd1e7e6.js"
+    "static/css/main.1e4eb165.css",
+    "static/js/main.de4ac6b2.js"
   ]
 }
