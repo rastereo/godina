@@ -81,6 +81,7 @@ function Photograph(
             <img
               src={link}
               alt="Фото из игры"
+              className="photograph__image"
               ref={currentImage}
               onError={() => {
                 setIsLoaded(false);

@@ -6,10 +6,10 @@ import locApi from './LocApi';
 import pastVuApi from './PastVuApi';
 
 const apiConfig: IApiConfig[] = [
-  { api: pastVuApi, minId: 1, maxId: 5000000 },
-  { api: historyPinApi, minId: 1, maxId: 1300000 },
-  { api: kinopoiskApi, minId: 1, maxId: 1000000 },
-  { api: locApi, minId: 1, maxId: 1500000 },
+  { api: pastVuApi, minId: 1, maxId: 10e6 },
+  { api: historyPinApi, minId: 1, maxId: 3e6 },
+  { api: kinopoiskApi, minId: 1, maxId: 10e6 },
+  { api: locApi, minId: 1, maxId: 3e6 },
 ];
 
 export default apiConfig;
