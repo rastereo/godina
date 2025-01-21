@@ -1,24 +1,24 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import './CorrectAnswer.scss';
 
 import colorGradient from '../../utils/colorGradient';
 
-function CorrectAnswer(props: {
-  year: number | null,
-  title: string,
-  region: string,
-  distance: number | null,
-  isAnswer: boolean
-}) {
-  const {
-    year,
-    title,
-    region,
-    distance,
-    isAnswer,
-  } = props;
+interface ICorrectAnswerProps {
+  year: number | null;
+  title: string;
+  region: string;
+  distance: number | null;
+  isAnswer: boolean;
+}
 
+function CorrectAnswer({
+  year,
+  title,
+  region,
+  distance,
+  isAnswer,
+}: ICorrectAnswerProps) {
   const currentYear = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -26,7 +26,8 @@ function CorrectAnswer(props: {
       if (distance < 30) {
         currentYear.current.style.backgroundColor = colorGradient[distance];
       } else {
-        currentYear.current.style.backgroundColor = colorGradient[colorGradient.length - 1];
+        currentYear.current.style.backgroundColor =
+          colorGradient[colorGradient.length - 1];
       }
     } else if (currentYear.current !== null) {
       currentYear.current.style.backgroundColor = 'inherit';

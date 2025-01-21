@@ -1,10 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Total from '../Total/Total';
 import Game from '../Game/Game';
 
 import apiConfig from '../../utils/apiConfig';
+// import Presentation from '../Presentation/Presentation';
+
+import './index.scss';
 
 function App() {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
@@ -40,19 +42,14 @@ function App() {
 
     const randomApi = randomInteger(0, apiConfig.length - 1);
 
-    const {
-      api,
-      minId,
-      maxId,
-    } = apiConfig[randomApi];
+    const { api, minId, maxId } = apiConfig[randomApi];
 
     try {
-      const {
-        url,
-        year,
-        title,
-        region,
-      } = await api.getPhoto(randomInteger(minId, maxId), isPhotoLoaded, randomInteger);
+      const { url, year, title, region } = await api.getPhoto(
+        randomInteger(minId, maxId),
+        isPhotoLoaded,
+        randomInteger
+      );
 
       setPhotoUrl(url);
       setPhotoYear(year);
@@ -111,32 +108,30 @@ function App() {
     setScore(score + points);
   }, [distance]);
 
-  return (
-    isTotal
-      ? <Total score={score} restartGame={restartGame} />
-      : (
-        <>
-          {/* <Presentation /> */}
-          <Game
-            round={round}
-            score={score}
-            photoUrl={photoUrl}
-            distance={distance}
-            photoYear={photoYear}
-            photoTitle={photoTitle}
-            photoRegion={photoRegion}
-            isAnswer={isAnswer}
-            userYear={userYear}
-            isLoading={isLoading}
-            setUserYear={setUserYear}
-            setIsTotal={setIsTotal}
-            showAnswer={showAnswer}
-            getRandomPhoto={getRandomPhoto}
-            resetRound={resetRound}
-          />
-          {/* {!isTotal && <BasicTable />} */}
-        </>
-      )
+  return isTotal ? (
+    <Total score={score} restartGame={restartGame} />
+  ) : (
+    <>
+      {/* <Presentation /> */}
+      <Game
+        round={round}
+        score={score}
+        photoUrl={photoUrl}
+        distance={distance}
+        photoYear={photoYear}
+        photoTitle={photoTitle}
+        photoRegion={photoRegion}
+        isAnswer={isAnswer}
+        userYear={userYear}
+        isLoading={isLoading}
+        setUserYear={setUserYear}
+        setIsTotal={setIsTotal}
+        showAnswer={showAnswer}
+        getRandomPhoto={getRandomPhoto}
+        resetRound={resetRound}
+      />
+      {/* {!isTotal && <BasicTable />} */}
+    </>
   );
 }
 

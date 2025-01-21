@@ -8,5 +8,5 @@ $format: 'truetype';
   font-style: $style;
   font-weight: 400;
   font-display: $display;
-  src: url("./better-vcr/better-vcr.ttf") format($format);
+  src: url('../../assets/better-vcr/better-vcr.ttf') format($format);
 }

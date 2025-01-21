@@ -1,16 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Transition } from 'react-transition-group';
-
-import './Photograph.scss';
 
 import colorGradient from '../../utils/colorGradient';
 
-const duration = 200;
-
-const defaultStyle = {
-  transition: `opacity ${duration}ms ease-in-out`,
-  opacity: 0,
-};
+import './Photograph.scss';
 
 interface TransitionStyles {
   entering: {
@@ -30,6 +23,20 @@ interface TransitionStyles {
   };
 }
 
+interface IPhotographProps {
+  link: string | null;
+  distance: number | null;
+  getRandomPhoto: () => void;
+  setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const duration = 200;
+
+const defaultStyle = {
+  transition: `opacity ${duration}ms ease-in-out`,
+  opacity: 0,
+};
+
 const transitionStyles: TransitionStyles = {
   entering: { opacity: 1 },
   entered: { opacity: 1 },
@@ -37,21 +44,12 @@ const transitionStyles: TransitionStyles = {
   exited: { opacity: 0 },
 };
 
-function Photograph(
-  props: {
-    link: string | null,
-    distance: number | null,
-    getRandomPhoto: () => void,
-    setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>
-  },
-) {
-  const {
-    link,
-    distance,
-    getRandomPhoto,
-    setIsLoaded,
-  } = props;
-
+function Photograph({
+  link,
+  distance,
+  getRandomPhoto,
+  setIsLoaded,
+}: IPhotographProps) {
   const [isTransition, setIsTransition] = useState<boolean>(false);
 
   const currentImage = useRef<HTMLImageElement>(null);
@@ -66,7 +64,9 @@ function Photograph(
       if (distance < 30) {
         currentImage.current.style.border = `2px solid ${colorGradient[distance]}`;
       } else {
-        currentImage.current.style.border = `2px solid ${colorGradient[colorGradient.length - 1]}`;
+        currentImage.current.style.border = `2px solid ${
+          colorGradient[colorGradient.length - 1]
+        }`;
       }
     } else if (currentImage.current !== null) {
       currentImage.current.style.border = 'none';
@@ -97,7 +97,8 @@ function Photograph(
         </Transition>
       </section>
     );
-  } return null;
+  }
+  return null;
 }
 
 export default Photograph;

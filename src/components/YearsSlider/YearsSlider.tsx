@@ -1,29 +1,27 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React, { useEffect } from 'react';
 import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
-
-import './YearsSlider.scss';
 
 import UseGetColor from '../../hooks/UseGetColor';
 
-function YearsSlider(props: {
-  userYear: number,
-  photoYear: number | null,
-  isAnswer: boolean,
-  distance: number | null,
-  setUserYear: (value: React.SetStateAction<number>) => void,
-  isLoaded: boolean
-}) {
-  const {
-    userYear,
-    photoYear,
-    isAnswer,
-    distance,
-    setUserYear,
-    isLoaded,
-  } = props;
+import 'rc-slider/assets/index.css';
+import './YearsSlider.scss';
 
+interface IYearsSliderProps {
+  userYear: number;
+  photoYear: number | null;
+  isAnswer: boolean;
+  distance: number | null;
+  setUserYear: (value: React.SetStateAction<number>) => void;
+  isLoaded: boolean;
+}
+
+function YearsSlider({
+  userYear,
+  photoYear,
+  isAnswer,
+  distance,
+  setUserYear,
+  isLoaded,
+}: IYearsSliderProps) {
   const todyYear = new Date().getFullYear();
 
   function getColorRange(): string {
@@ -39,7 +37,8 @@ function YearsSlider(props: {
     border: '2px solid hsl(250deg 100% 20%)',
     borderRadius: 4,
     marginTop: '-20px',
-    background: 'linear-gradient(to left, hsl(250deg 100% 16%) 0%, hsl(250deg 100% 32%) 8%, hsl(250deg 100% 32%) 92%, hsl(250deg 100% 16%) 100%)',
+    background:
+      'linear-gradient(to left, hsl(250deg 100% 16%) 0%, hsl(250deg 100% 32%) 8%, hsl(250deg 100% 32%) 92%, hsl(250deg 100% 16%) 100%)',
   };
 
   if (isAnswer && distance && distance >= 0 && photoYear) {

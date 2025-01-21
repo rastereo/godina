@@ -5,17 +5,17 @@ import Bottleneck from 'bottleneck';
 import { IContentPhoto } from '../types';
 
 interface ResponseData {
-  caption: string,
-  date: string,
+  caption: string;
+  date: string;
   display: {
-    [key: string]: string,
-  },
+    [key: string]: string;
+  };
   content: {
-    [key: string]: string,
-  },
+    [key: string]: string;
+  };
   location: {
-    geo_tags: string
-  },
+    geo_tags: string;
+  };
 }
 
 class HistoryPinApi {
@@ -23,8 +23,7 @@ class HistoryPinApi {
     maxConcurrent: 1,
   });
 
-  constructor(private baseUrl: string) {
-  }
+  constructor(private baseUrl: string) {}
 
   private setParams(id: number): string {
     return `?id=${id}`;
@@ -32,14 +31,9 @@ class HistoryPinApi {
 
   private getContentPhoto(
     res: ResponseData,
-    isPhotoLoaded: boolean,
+    isPhotoLoaded: boolean
   ): Promise<never> | IContentPhoto {
-    const {
-      caption,
-      date,
-      display,
-      location,
-    } = res;
+    const { caption, date, display, location } = res;
 
     if (!isPhotoLoaded) {
       const contentPhoto: IContentPhoto = {
@@ -57,7 +51,7 @@ class HistoryPinApi {
         let yearSum: number = 0;
 
         // eslint-disable-next-line no-return-assign
-        yearMatch.forEach((year) => yearSum += Number(year));
+        yearMatch.forEach((year) => (yearSum += Number(year)));
 
         contentPhoto.year = Math.round(yearSum / yearMatch.length);
       } else return Promise.reject();
@@ -85,22 +79,15 @@ class HistoryPinApi {
     return Promise.reject(JSON.parse(error));
   }
 
-  private checkData(
-    data: ResponseData,
-  ): Promise<never> | ResponseData {
-    const {
-      caption,
-      date,
-      display,
-      location,
-    } = data;
+  private checkData(data: ResponseData): Promise<never> | ResponseData {
+    const { caption, date, display, location } = data;
 
     if (
-      date === 'Date Unknown'
-      || date === undefined
-      || caption === ''
-      || display.content === ''
-      || location.geo_tags === ''
+      date === 'Date Unknown' ||
+      date === undefined ||
+      caption === '' ||
+      display.content === '' ||
+      location.geo_tags === ''
     ) {
       return Promise.reject();
     }
@@ -108,13 +95,15 @@ class HistoryPinApi {
     return data;
   }
 
-  public async getPhoto(id: number, isPhotoLoaded: boolean): Promise<never | IContentPhoto> {
-    const res = await this.limiter.schedule(() => fetch(
-      this.baseUrl + this.setParams(id),
-      {
+  public async getPhoto(
+    id: number,
+    isPhotoLoaded: boolean
+  ): Promise<never | IContentPhoto> {
+    const res = await this.limiter.schedule(() =>
+      fetch(this.baseUrl + this.setParams(id), {
         method: 'GET',
-      },
-    ));
+      })
+    );
 
     const data = await this.checkData(await this.getResponseData(res));
 
@@ -122,6 +111,8 @@ class HistoryPinApi {
   }
 }
 
-const historyPinApi = new HistoryPinApi('https://www.historypin.org/en/api/pin/get.json');
+const historyPinApi = new HistoryPinApi(
+  'https://www.historypin.org/en/api/pin/get.json'
+);
 
 export default historyPinApi;

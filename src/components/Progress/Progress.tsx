@@ -1,10 +1,11 @@
-import React from 'react';
-
 import './Progress.scss';
 
-function App(props: { round: number, score: number }) {
-  const { round, score } = props;
+interface IProgressProps {
+  round: number;
+  score: number;
+}
 
+function Progress({ round, score }: IProgressProps) {
   return (
     <section className="progress">
       <h2>{`Раунд: ${round} из 10`}</h2>
@@ -13,4 +14,4 @@ function App(props: { round: number, score: number }) {
   );
 }
 
-export default App;
+export default Progress;
