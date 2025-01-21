@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 // https://seeing.monster/docs#/Godina%20back%20API/send_score_api_send_score_post
 
 class MainApi {
@@ -24,7 +23,9 @@ class MainApi {
   }
 
   public async setNewScore(name: string, score: number): Promise<any> {
-    const res = await fetch(`${this.baseUrl}/send_score${this.setParams(name, score)}`);
+    const res = await fetch(
+      `${this.baseUrl}/send_score${this.setParams(name, score)}`
+    );
 
     return this.getResponseData(res);
   }

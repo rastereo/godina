@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { TextField } from '@mui/material';
+
+import mainApi from '../../utils/MainApi';
 
 import './Total.scss';
 
-import { TextField } from '@mui/material';
-import mainApi from '../../utils/MainApi';
+interface ITotalProps {
+  score: number;
+  restartGame: () => void;
+}
 
-function Total(props: { score: number, restartGame: () => void }) {
-  const { score, restartGame } = props;
+function Total({ score, restartGame }: ITotalProps) {
   const [value, setValue] = useState<string>('');
 
   function saveScore() {
     if (value.length > 0) {
       localStorage.setItem('name', value);
 
-      mainApi.setNewScore(value, score)
-        .catch((err: Error) => console.log(err));
+      mainApi.setNewScore(value, score).catch((err: Error) => console.log(err));
     }
   }
 
@@ -26,9 +29,7 @@ function Total(props: { score: number, restartGame: () => void }) {
 
   return (
     <main className="total">
-      <h1>
-        {`Итог: ${score} из 1000 баллов`}
-      </h1>
+      <h1>{`Итог: ${score} из 1000 баллов`}</h1>
       <form
         onSubmit={(evt) => {
           evt.preventDefault();
@@ -52,14 +53,10 @@ function Total(props: { score: number, restartGame: () => void }) {
           value={value && value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <button
-          type="submit"
-        >
+        <button type="submit">
           <span className="shadow" />
           <span className="edge" />
-          <span className="front">
-            New Game
-          </span>
+          <span className="front">New Game</span>
         </button>
       </form>
     </main>

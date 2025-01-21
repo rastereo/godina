@@ -1,18 +1,14 @@
-/* eslint-disable class-methods-use-this */
-
 import { IContentPhoto } from '../types';
 
 interface Result {
-  image_url: string[]
+  image_url: string[];
   date: string;
   title: string;
-  location: string[],
+  location: string[];
 }
 
 interface ResponseData {
-  content: {
-    results: Result[],
-  }
+  results: Result[];
 }
 
 class LocApi {
@@ -20,17 +16,21 @@ class LocApi {
 
   private getContentPhoto(
     res: ResponseData,
-    isPhotoLoaded: boolean,
+    isPhotoLoaded: boolean
   ): Promise<never> | IContentPhoto {
-    const sliceYear = Number(res.content.results[0].date.slice(0, 4));
+    const data = res.results[0];
+
+    const sliceYear = Number(data.date.slice(0, 4));
 
     if (
-      sliceYear
-      && sliceYear >= 1826
-      && !isPhotoLoaded
-      && res.content.results[0].image_url.length > 0
-      && res.content.results[0].image_url[0] !== 'https://www.loc.gov/static/images/original-format/personal-narrative.svg'
-      && res.content.results[0].image_url[0] !== 'https://www.loc.gov/static/images/original-format/group-of-images.svg'
+      sliceYear &&
+      sliceYear >= 1826 &&
+      !isPhotoLoaded &&
+      data.image_url.length > 0 &&
+      data.image_url[0] !==
+        'https://www.loc.gov/static/images/original-format/personal-narrative.svg' &&
+      data.image_url[0] !==
+        'https://www.loc.gov/static/images/original-format/group-of-images.svg'
     ) {
       const contentPhoto: IContentPhoto = {
         url: '',
@@ -41,13 +41,14 @@ class LocApi {
 
       contentPhoto.year = sliceYear;
 
-      contentPhoto.url = res
-        .content.results[0]
-        .image_url[res.content.results[0].image_url.length - 1];
+      contentPhoto.url =
+        data.image_url[
+          data.image_url.length - 1
+        ];
 
-      contentPhoto.title = res.content.results[0].title;
+      contentPhoto.title = data.title;
 
-      contentPhoto.region = res.content.results[0].location.join('. ');
+      contentPhoto.region = data.location.join('. ');
 
       return contentPhoto;
     }
@@ -55,9 +56,7 @@ class LocApi {
     return Promise.reject();
   }
 
-  private async getResponseData(
-    res: Response,
-  ): Promise<never | ResponseData> {
+  private async getResponseData(res: Response): Promise<never | ResponseData> {
     if (res.ok) {
       const responseData = await res.json();
 
@@ -69,18 +68,17 @@ class LocApi {
     return Promise.reject(JSON.parse(error));
   }
 
-  private async fetchWithTimeout(resource: string): Promise<never | ResponseData> {
+  private async fetchWithTimeout(
+    resource: string
+  ): Promise<never | ResponseData> {
     const timeout = 5000;
 
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
 
-    const response = await fetch(
-      resource,
-      {
-        signal: controller.signal,
-      },
-    );
+    const response = await fetch(resource, {
+      signal: controller.signal,
+    });
 
     clearTimeout(id);
 
@@ -89,16 +87,24 @@ class LocApi {
 
   public async getPhoto(
     id: number,
-    isPhotoLoaded: boolean,
+    isPhotoLoaded: boolean
   ): Promise<never | IContentPhoto> {
     const responseData = await this.fetchWithTimeout(this.baseUrl + id);
+    // const responseData = await this.fetchWithTimeout(`${this.baseUrl}${id}/?fo=json`);
+    // const responseData = await this.fetchWithTimeout(
+    //   `${this.baseUrl}2014717546/?fo=json`
+    // );
 
-    const contentPhoto = await this.getContentPhoto(responseData, isPhotoLoaded);
+    const contentPhoto = await this.getContentPhoto(
+      responseData,
+      isPhotoLoaded
+    );
 
     return contentPhoto;
   }
 }
 
 const locApi = new LocApi('https://www.loc.gov/photos/?fo=json&c=1&sp=');
+// const locApi = new LocApi('https://www.loc.gov/items/');
 
 export default locApi;
