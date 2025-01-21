@@ -73,3 +73,5 @@ npm run start
 - Оптимизация
 - Написать инструкцию к игре
 - Решить проблему с CORS у HistoryPin
+
+## 🧾[MIT Licensed](https://github.com/rastereo/godina/blob/main/LICENSE)
