@@ -1,3 +1,4 @@
+import GameButton from '../GameButton/GameButton';
 import YearsSlider from '../YearsSlider/YearsSlider';
 
 import './Controller.scss';
@@ -51,38 +52,29 @@ function Controller({
         setUserYear={setUserYear}
         isLoaded={isLoaded}
       />
-      <button
-        type="button"
-        onClick={showAnswer}
-        disabled={isAnswer || userYear === 0}
-      >
-        <span className="shadow" />
-        <span className="edge" />
-        <span className="front">Submit</span>
-      </button>
+      <GameButton
+        handleClick={showAnswer}
+        isDisabled={isAnswer || userYear === 0}
+        text="Отправить"
+        type="submit"
+      />
       {round === 10 ? (
-        <button
+        <GameButton
+          handleClick={() => setIsTotal(true)}
+          isDisabled={!isAnswer}
+          text="Итог"
           type="button"
-          onClick={() => setIsTotal(true)}
-          disabled={!isAnswer}
-        >
-          <span className="shadow" />
-          <span className="edge" />
-          <span className="front">Total</span>
-        </button>
+        />
       ) : (
-        <button
-          type="submit"
-          onClick={() => {
+        <GameButton
+          handleClick={() => {
             resetRound();
             setIsLoaded(false);
           }}
-          disabled={!isAnswer}
-        >
-          <span className="shadow" />
-          <span className="edge" />
-          <span className="front">Next</span>
-        </button>
+          isDisabled={!isAnswer}
+          text="Далее"
+          type="button"
+        />
       )}
     </section>
   );

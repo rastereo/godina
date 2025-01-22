@@ -1,0 +1,61 @@
+.presentation {
+  max-width: 1280px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: 0 auto;
+  padding: 0 40px 20px;
+  overflow: hidden;
+
+  &__title {
+    margin: 0;
+    padding-top: 10px;
+  }
+
+  figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  &__image {
+    display: block;
+    object-fit: contain;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    max-height: 500px;
+    padding-bottom: 20px;
+  }
+
+  &__description {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  &__wiki {
+    text-decoration: none;
+  }
+
+  &__instruction {
+    font-size: 14px;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 450px) {
+    & {
+      padding: 10px 5px 30px;
+    }
+  }
+}
+
+// * {
+//   outline: 2px solid red;
+// }

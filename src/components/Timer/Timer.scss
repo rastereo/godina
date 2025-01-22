@@ -1,0 +1,16 @@
+.timer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  &_red {
+    color: red;
+  }
+
+  @media screen and (max-width: 450px) {
+    & {
+      font-size: 14px;
+    }
+  }
+}
