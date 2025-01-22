@@ -4,6 +4,7 @@ import { TextField } from '@mui/material';
 import mainApi from '../../utils/MainApi';
 
 import './Total.scss';
+import GameButton from '../GameButton/GameButton';
 
 interface ITotalProps {
   score: number;
@@ -41,7 +42,7 @@ function Total({ score, restartGame }: ITotalProps) {
         <TextField
           type="search"
           id="outlined-basic"
-          label="Name"
+          label="Имя"
           variant="filled"
           autoComplete="new-password"
           sx={{
@@ -53,11 +54,7 @@ function Total({ score, restartGame }: ITotalProps) {
           value={value && value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <button type="submit">
-          <span className="shadow" />
-          <span className="edge" />
-          <span className="front">New Game</span>
-        </button>
+        <GameButton text="Новая Игра" type="submit" />
       </form>
     </main>
   );

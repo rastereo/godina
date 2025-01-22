@@ -1,10 +1,16 @@
+import { useNavigate } from 'react-router-dom';
+
+import GameButton from '../../components/GameButton/GameButton';
+
 import './Presentation.scss';
 
 function Presentation() {
+  const navigate = useNavigate();
+
   return (
     <main className="presentation">
       <h1 className="presentation__title">Игра Godina</h1>
-      <figure>
+      <figure className="">
         <img
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/View_from_the_Window_at_Le_Gras%2C_Joseph_Nic%C3%A9phore_Ni%C3%A9pce%2C_uncompressed_UMN_source.png/1920px-View_from_the_Window_at_Le_Gras%2C_Joseph_Nic%C3%A9phore_Ni%C3%A9pce%2C_uncompressed_UMN_source.png"
           alt="Вид из окна в Ле Гра"
@@ -31,11 +37,11 @@ function Presentation() {
         сохранить свой результат и, если он достаточно высок, попасть в таблицу
         лучших игроков. Удачи!
       </p>
-      <button type="button">
-        <span className="shadow" />
-        <span className="edge" />
-        <span className="front">Играть</span>
-      </button>
+      <GameButton
+        handleClick={() => navigate('/game')}
+        text="Играть"
+        type="button"
+      />
     </main>
   );
 }

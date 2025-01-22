@@ -1,0 +1,63 @@
+/** Fonts **/
+
+@import url(./vendor/fonts/fonts.scss);
+
+/** Normalize **/
+
+@import url(./vendor/normalize.scss);
+
+body {
+  width: 100%;
+  max-width: 1480px;
+  background-color: #000;
+  color: #fff;
+  margin: 0 auto;
+  display: flex;
+}
+
+.root {
+  font-family: 'Better VCR', Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: normal;
+
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  text-align: center;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+  background-color: #000;
+  color: #fff;
+  margin: 0;
+}
+
+.top-user__title {
+  color: orange;
+  text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+}
+
+.top-users__position {
+  padding-right: 20%;
+}
+
+figure {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
